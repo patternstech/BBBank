@@ -1,0 +1,6 @@
+@BBBankAPI_HostAddress = http://localhost:5111
+
+GET {{BBBankAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
