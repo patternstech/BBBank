@@ -13,7 +13,7 @@ namespace Entites
         public string LastName { get; set; }
         public string Email { get; set; }
         public string ProfilePicUrl { get; set; }
-        public Account Account { get; set; }
+        public virtual Account Account { get; set; }
     }
 
 }
