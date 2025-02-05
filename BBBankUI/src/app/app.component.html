@@ -1,16 +1,7 @@
-<div class="container-fluid" style="height: 100%;">
-<app-toolbar></app-toolbar>
-  <ul>
-    <li><a><i class="fas fa-chart-line"></i>Dashboard</a></li>
-    <div>
-      <li><a><i class="fas fa-random"></i> Transfer Funds</a></li>
-      <li><a><i class="fas fa-money-check-alt"></i>Deposit Funds</a></li>
-      <li><a><i class="fas fa-user"></i> Create New Account</a></li>
-      <li><a><i class="fas fa-users"></i> Manage Accounts</a></li>
-    </div>
-  </ul>
-</div>
-<div class="container">
-  <button type="button" class="ml-5 btn btn-primary">Primary</button>
-</div>
-<router-outlet />
+<div class="container-fluid" style="height: 100%;background-color: #1e1e2f;">
+<app-toolbar [inputSideNav]="sidenav"></app-toolbar>
+
+<mat-sidenav-container style="height: 100%;">
+  <mat-sidenav #sidenav opened mode="side"><app-side-nav></app-side-nav></mat-sidenav>
+  <mat-sidenav-content><router-outlet /></mat-sidenav-content>
+</mat-sidenav-container>
