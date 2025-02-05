@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Entites
@@ -12,6 +13,7 @@ namespace Entites
         public string AccountNumber { get; set; }
         public string AccountTitle { get; set; }
         public decimal CurrentBalance { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public AccountStatus AccountStatus { get; set; }
         [ForeignKey("UserId")]
         public string UserId { get; set; }

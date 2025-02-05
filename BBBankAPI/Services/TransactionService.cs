@@ -1,22 +1,24 @@
 ﻿using Entites;
 using Entites.ResponseModels;
 using Infrastructure;
+using Infrastructure.Contracts;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace Services
 {
     public class TransactionService : ITransactionService
     {
-        private readonly BBBankContext _bbBankContext;
-        public TransactionService(BBBankContext BBBankContext)
+        private readonly IUnitOfWork _unitOfWork;
+        public TransactionService(BBBankContext BBBankContext, IUnitOfWork unitOfWork)
         {
-            _bbBankContext = BBBankContext;
+            _unitOfWork = unitOfWork;
         }
         public async Task<LineGraphData> GetLast12MonthBalances(string userId)
         {
@@ -25,11 +27,11 @@ namespace Services
             var allTransactions = new List<Transaction>();
             if (userId != null)
             {
-                allTransactions = _bbBankContext.Transactions.Where(x => x.Account.User.Id == userId).ToList();
+                allTransactions = await _unitOfWork.TransactionRepository.FindAllAsync(x => x.Account.User.Id == userId);
             }
             else
             {
-                allTransactions = _bbBankContext.Transactions.ToList();
+                allTransactions = await _unitOfWork.TransactionRepository.GetAllAsync();
             }
             if (allTransactions.Any())
             {

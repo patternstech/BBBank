@@ -3,6 +3,8 @@ using Services.Contracts;
 
 using Services;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+using Infrastructure.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,17 +15,21 @@ var configuration = new ConfigurationBuilder()
 
 var connectionString = configuration.GetConnectionString("BBBankDBConnString");
 
+builder.Services.AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(SQLRepository<>));
+
 builder.Services.AddScoped<DbContext, BBBankContext>();
 
 builder.Services.AddDbContext<BBBankContext>(
-b => b.UseSqlServer(connectionString)
-.UseLazyLoadingProxies(true)
+b => b.UseSqlServer(connectionString , options => options.EnableRetryOnFailure())
+.UseLazyLoadingProxies(false)
 );
 var app = builder.Build();
 
