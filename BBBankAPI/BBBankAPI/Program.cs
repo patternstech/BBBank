@@ -7,6 +7,15 @@ using System.Text.Json.Serialization;
 using Infrastructure.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      builder =>
+                      {
+                          builder.WithOrigins("http://localhost:4200");
+                      });
+});
 
 var configuration = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -32,7 +41,7 @@ b => b.UseSqlServer(connectionString , options => options.EnableRetryOnFailure()
 .UseLazyLoadingProxies(false)
 );
 var app = builder.Build();
-
+app.UseCors(MyAllowSpecificOrigins);
 // Configure the HTTP request pipeline.
 
 app.UseAuthorization();

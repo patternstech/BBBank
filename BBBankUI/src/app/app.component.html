@@ -1,7 +1,7 @@
 <div class="container-fluid" style="height: 100%;background-color: #1e1e2f;">
 <app-toolbar [inputSideNav]="sidenav"></app-toolbar>
 
-<mat-sidenav-container style="height: 100%;">
-  <mat-sidenav #sidenav opened mode="side"><app-side-nav></app-side-nav></mat-sidenav>
+<mat-sidenav-container style="height: 100%;background-color: #1e1e2f;">
+  <mat-sidenav style="height: 100%;background-color: #1e1e2f;" #sidenav opened mode="side"><app-side-nav></app-side-nav></mat-sidenav>
   <mat-sidenav-content><router-outlet /></mat-sidenav-content>
 </mat-sidenav-container>

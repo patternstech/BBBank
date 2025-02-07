@@ -15,7 +15,7 @@ namespace BBBankAPI.Controllers
         }
         [HttpGet]
         [Route("GetLast12MonthBalances")]
-        public async Task<ActionResult> GetLast3MonthBalances()
+        public async Task<ActionResult> GetLast12MonthBalances()
         {
             try
             {
