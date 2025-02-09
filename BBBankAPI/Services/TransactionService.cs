@@ -2,6 +2,7 @@
 using Entites.ResponseModels;
 using Infrastructure;
 using Infrastructure.Contracts;
+using Microsoft.Extensions.Options;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -16,9 +17,11 @@ namespace Services
     public class TransactionService : ITransactionService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public TransactionService(BBBankContext BBBankContext, IUnitOfWork unitOfWork)
+        public Settings _settings { get; }
+        public TransactionService(IUnitOfWork unitOfWork, IOptionsSnapshot<Settings> options)
         {
             _unitOfWork = unitOfWork;
+            _settings = options.Value;
         }
         public async Task<LineGraphData> GetLast12MonthBalances(string userId)
         {
