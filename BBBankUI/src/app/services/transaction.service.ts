@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../environments/environment.development';
-import { LineGraphData } from './models/line-graph-data';
+import { environment } from '../../environments/environment.development';
+import { LineGraphData } from '../models/line-graph-data';
 
 @Injectable({
   providedIn: 'root'

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
-import { TransactionService } from '../../transaction.service';
 import { LineGraphData } from '../../models/line-graph-data';
 import { CommonModule } from '@angular/common';
+import { TransactionService } from '../../services/transaction.service';
 
 @Component({
   selector: 'app-dashboard',
