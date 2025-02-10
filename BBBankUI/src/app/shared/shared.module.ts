@@ -11,7 +11,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
   declarations: [],
   imports: [
     CommonModule,
-    RouterOutlet, ToolbarComponent, MatSidenavModule, SideNavComponent
+    RouterOutlet, ToolbarComponent, MatSidenavModule, SideNavComponent 
   ],
   exports: [
     RouterOutlet, ToolbarComponent, MatSidenavModule, SideNavComponent

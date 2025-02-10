@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
    loggedInUser = {
+    id: 'aa45e3c9-261d-41fe-a1b0-5b4dcf79cfd3',
     firstName: 'Muhammad',
     lastName: 'Ali',
     username: 'mali',
