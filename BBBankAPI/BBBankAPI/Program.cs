@@ -8,16 +8,18 @@ using Infrastructure.Contracts;
 using Entites;
 using Azure.Identity;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
+using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      builder =>
-                      {
-                          builder.WithOrigins("http://localhost:4200");
-                      });
+    options.AddPolicy(MyAllowSpecificOrigins, builder => builder
+                  .WithOrigins("http://localhost:4200", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials()
+       );
 });
 
 var configuration = new ConfigurationBuilder()
@@ -57,10 +59,11 @@ builder.Services.AddDbContext<BBBankContext>(
 b => b.UseSqlServer(connectionString, options => options.EnableRetryOnFailure())
 .UseLazyLoadingProxies(false)
 );
+builder.Services.AddMicrosoftIdentityWebApiAuthentication(configuration, "AzureAd");
 var app = builder.Build();
 app.UseCors(MyAllowSpecificOrigins);
 // Configure the HTTP request pipeline.
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

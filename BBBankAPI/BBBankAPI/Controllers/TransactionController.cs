@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 
@@ -13,6 +14,7 @@ namespace BBBankAPI.Controllers
         {
             _transactionService = transactionService;
         }
+        [Authorize(Roles = "bank-manager")]
         [HttpGet]
         [Route("GetLast12MonthBalances")]
         public async Task<ActionResult> GetLast12MonthBalances()
@@ -26,6 +28,7 @@ namespace BBBankAPI.Controllers
                 return new BadRequestObjectResult(ex);
             }
         }
+        [Authorize(Roles = "account-holder")]
         [HttpGet]
         [Route("GetLast12MonthBalances/{userId}")]
         public async Task<ActionResult> GetLast12MonthBalances(string userId)

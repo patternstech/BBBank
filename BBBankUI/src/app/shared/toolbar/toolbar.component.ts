@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { AppUser } from '../../models/app-user';
-import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { MsalService } from '@azure/msal-angular';
 
 @Component({
   selector: 'app-toolbar',
@@ -14,7 +14,7 @@ export class ToolbarComponent implements OnInit {
   @Input() inputSideNav:MatSidenav | undefined
   loggedInUser?: AppUser;
   isUserLoggedIn: boolean;
-  constructor(private authService: AuthService) {
+  constructor(private authService: MsalService) {
 
    }
    ngOnInit(): void {
@@ -25,6 +25,11 @@ export class ToolbarComponent implements OnInit {
     }
   }
   logout(): void {
-    this.authService.logout();
+    if (typeof localStorage !== 'undefined' ) {
+      localStorage.removeItem('loggedInUser');
+    }
+    this.authService.logoutRedirect({
+      postLogoutRedirectUri: '/login' // ✅ Redirect to a specific component
+    });
   }
 }

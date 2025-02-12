@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CategoryScale, Chart, LinearScale, registerables } from 'chart.js';
 import { AppUser } from '../../../../models/app-user';
 import { LineGraphData } from '../../../../models/line-graph-data';
@@ -11,7 +11,7 @@ Chart.register(...registerables);
   templateUrl: './last12-month-graph.component.html',
   styleUrl: './last12-month-graph.component.css'
 })
-export class Last12MonthGraphComponent implements OnInit {
+export class Last12MonthGraphComponent implements OnInit, AfterViewInit {
   @ViewChild('chartBig1') myCanvas: ElementRef;
   lineGraphData: LineGraphData;
   gradientChartOptionsConfigurationWithTooltipRed: any;
@@ -42,10 +42,23 @@ export class Last12MonthGraphComponent implements OnInit {
     }
   }
   ngOnInit(): void {
-    this.loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (typeof localStorage !== 'undefined') {
+      this.loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    }
   }
   ngAfterViewInit(): void {
-    this.context = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+    const canvas = this.myCanvas.nativeElement as HTMLCanvasElement;
+    if (!canvas) {
+      console.error('Canvas element not found');
+      return;
+    }
+  
+    this.context = canvas.getContext('2d');
+    if (!this.context) {
+      console.error('Could not get 2D context');
+      return;
+    }
+  
     this.transactionService.getLast12MonthBalances(this.loggedInUser?.id)
       .subscribe({
         next: (data: LineGraphData) => {
@@ -54,6 +67,7 @@ export class Last12MonthGraphComponent implements OnInit {
           gradientStroke.addColorStop(1, 'rgba(233,32,16,0.2)');
           gradientStroke.addColorStop(0.4, 'rgba(233,32,16,0.0)');
           gradientStroke.addColorStop(0, 'rgba(233,32,16,0)'); // red colors
+  
           this.myChart = new Chart(this.context, {
             type: 'line',
             data: {
@@ -65,8 +79,6 @@ export class Last12MonthGraphComponent implements OnInit {
                   backgroundColor: gradientStroke,
                   borderColor: '#ec250d',
                   borderWidth: 2,
-                  // borderDash: [],
-                  borderDashOffset: 0.0,
                   pointBackgroundColor: '#ec250d',
                   pointBorderColor: 'rgba(255,255,255,0)',
                   pointHoverBackgroundColor: '#ec250d',
@@ -77,12 +89,13 @@ export class Last12MonthGraphComponent implements OnInit {
                   data: this.lineGraphData?.figures,
                 },
               ],
-            }
+            },
+            options: this.gradientChartOptionsConfigurationWithTooltipRed
           });
         },
         error: (error: any) => {
           console.log(error);
         },
-      })
+      });
   }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(BBBankContext))]
-    [Migration("20250202100802_First")]
-    partial class First
+    [Migration("20250212215821_second_user_transactions_added")]
+    partial class second_user_transactions_added
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,9 +21,6 @@ namespace Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.1")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -64,18 +61,18 @@ namespace Infrastructure.Migrations
                             Id = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             AccountNumber = "0001-1001",
                             AccountStatus = 0,
-                            AccountTitle = "Raas Masood",
+                            AccountTitle = "Patterns Tech",
                             CurrentBalance = 3500m,
-                            UserId = "aa45e3c9-261d-41fe-a1b0-5b4dcf79cfd3"
+                            UserId = "5b1aa188-636f-436a-a2da-ae742ddadedf"
                         },
                         new
                         {
                             Id = "2f115781-c0d2-4f98-a70b-0bc4ed01d780",
                             AccountNumber = "0002-2002",
                             AccountStatus = 0,
-                            AccountTitle = "Salman Taj",
+                            AccountTitle = "John Doe",
                             CurrentBalance = 545m,
-                            UserId = "c651e237-102a-4de1-8c5a-d41c94079ff0"
+                            UserId = "52694168-6706-4595-bdea-bae0da5923f0"
                         });
                 });
 
@@ -106,98 +103,194 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "28c51fa0-f0ec-4b74-b4f6-da8d5cbeeed6",
+                            Id = "1ae030d0-7456-45e2-bd28-ccf8aed1df89",
                             AccountId = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             TransactionAmount = 3000m,
-                            TransactionDate = new DateTime(2025, 2, 1, 4, 8, 1, 793, DateTimeKind.Local).AddTicks(50),
+                            TransactionDate = new DateTime(2025, 2, 11, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8045),
                             TransactionType = 0
                         },
                         new
                         {
-                            Id = "88090472-7798-4231-b4cf-fa64047a8dc6",
+                            Id = "bf9a3246-0043-4b9f-bee5-3aca11334dab",
                             AccountId = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             TransactionAmount = -500m,
-                            TransactionDate = new DateTime(2024, 2, 2, 4, 8, 1, 794, DateTimeKind.Local).AddTicks(5877),
+                            TransactionDate = new DateTime(2024, 2, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8660),
                             TransactionType = 1
                         },
                         new
                         {
-                            Id = "51792daf-628f-4304-8f0d-016f011cc391",
+                            Id = "b5ab2b66-8526-4349-be98-62a7d656a422",
                             AccountId = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             TransactionAmount = 1000m,
-                            TransactionDate = new DateTime(2023, 2, 2, 4, 8, 1, 794, DateTimeKind.Local).AddTicks(5913),
+                            TransactionDate = new DateTime(2023, 2, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8683),
                             TransactionType = 0
                         },
                         new
                         {
-                            Id = "bf3d41ae-a020-4ac6-a309-970b76854014",
+                            Id = "45b982a1-3e81-4a43-a0b8-564bbe457e31",
                             AccountId = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             TransactionAmount = 500m,
-                            TransactionDate = new DateTime(2024, 11, 2, 4, 8, 1, 794, DateTimeKind.Local).AddTicks(5917),
+                            TransactionDate = new DateTime(2024, 11, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8700),
                             TransactionType = 0
                         },
                         new
                         {
-                            Id = "5b1bf3b8-f700-4974-bd84-c0a133ff6435",
+                            Id = "88fdf9d6-10c7-4979-8727-b2ece3664544",
                             AccountId = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             TransactionAmount = -200m,
-                            TransactionDate = new DateTime(2024, 10, 2, 4, 8, 1, 794, DateTimeKind.Local).AddTicks(5933),
+                            TransactionDate = new DateTime(2024, 10, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8750),
                             TransactionType = 1
                         },
                         new
                         {
-                            Id = "46d0e450-6301-4d49-bf3b-d09f59e7b158",
+                            Id = "8cb7f141-e59a-4d7c-b809-3dc2044458c4",
                             AccountId = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             TransactionAmount = 500m,
-                            TransactionDate = new DateTime(2024, 9, 2, 4, 8, 1, 794, DateTimeKind.Local).AddTicks(5935),
+                            TransactionDate = new DateTime(2024, 9, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8760),
                             TransactionType = 0
                         },
                         new
                         {
-                            Id = "d28816e1-bb92-4ed4-b8d9-4b24aaf0eef5",
+                            Id = "06db49d7-d068-4aa2-83f3-3a512aee5a4a",
                             AccountId = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             TransactionAmount = 200m,
-                            TransactionDate = new DateTime(2024, 8, 2, 4, 8, 1, 794, DateTimeKind.Local).AddTicks(5938),
+                            TransactionDate = new DateTime(2024, 8, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8782),
                             TransactionType = 0
                         },
                         new
                         {
-                            Id = "1e3731db-c89a-4d27-8efb-09e60b72edf6",
+                            Id = "7af18e39-4183-4e63-ab01-43fa8be08cdb",
                             AccountId = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             TransactionAmount = -300m,
-                            TransactionDate = new DateTime(2024, 7, 2, 4, 8, 1, 794, DateTimeKind.Local).AddTicks(5940),
+                            TransactionDate = new DateTime(2024, 7, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8786),
                             TransactionType = 1
                         },
                         new
                         {
-                            Id = "61cf7d1b-5e5c-412e-b7d7-ca68fc04140d",
+                            Id = "657e6b13-6289-4ae6-b620-85e57feb73a7",
                             AccountId = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             TransactionAmount = -100m,
-                            TransactionDate = new DateTime(2024, 6, 2, 4, 8, 1, 794, DateTimeKind.Local).AddTicks(5942),
+                            TransactionDate = new DateTime(2024, 6, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8796),
                             TransactionType = 1
                         },
                         new
                         {
-                            Id = "f778816e-bc02-4b62-9c61-7b76e1e5ca33",
+                            Id = "31bb56d7-cc28-411c-8b23-d472771f2999",
                             AccountId = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             TransactionAmount = 200m,
-                            TransactionDate = new DateTime(2024, 5, 2, 4, 8, 1, 794, DateTimeKind.Local).AddTicks(5945),
+                            TransactionDate = new DateTime(2024, 5, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8814),
                             TransactionType = 0
                         },
                         new
                         {
-                            Id = "4400c28a-a005-4786-87a5-3c7fa64c2b6d",
+                            Id = "cfb80e61-334f-43e4-ab0c-7dad889f993f",
                             AccountId = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             TransactionAmount = -500m,
-                            TransactionDate = new DateTime(2024, 4, 2, 4, 8, 1, 794, DateTimeKind.Local).AddTicks(5950),
+                            TransactionDate = new DateTime(2024, 4, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8817),
                             TransactionType = 1
                         },
                         new
                         {
-                            Id = "891ab004-d8ce-400f-8fcd-142e30ecb140",
+                            Id = "7552a7fe-f909-4ab5-8755-c110af85b3b2",
                             AccountId = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             TransactionAmount = 900m,
-                            TransactionDate = new DateTime(2024, 3, 2, 4, 8, 1, 794, DateTimeKind.Local).AddTicks(5952),
+                            TransactionDate = new DateTime(2024, 3, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8824),
+                            TransactionType = 0
+                        },
+                        new
+                        {
+                            Id = "95692060-ac52-4ba1-8688-ac1e3433b072",
+                            AccountId = "2f115781-c0d2-4f98-a70b-0bc4ed01d780",
+                            TransactionAmount = 2000m,
+                            TransactionDate = new DateTime(2025, 2, 11, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8838),
+                            TransactionType = 0
+                        },
+                        new
+                        {
+                            Id = "d9875372-4500-4e73-829d-7024ac062dc1",
+                            AccountId = "2f115781-c0d2-4f98-a70b-0bc4ed01d780",
+                            TransactionAmount = -400m,
+                            TransactionDate = new DateTime(2024, 2, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8842),
+                            TransactionType = 1
+                        },
+                        new
+                        {
+                            Id = "c0996c98-8ad8-4950-b9de-312e367874e2",
+                            AccountId = "2f115781-c0d2-4f98-a70b-0bc4ed01d780",
+                            TransactionAmount = 9000m,
+                            TransactionDate = new DateTime(2023, 2, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8849),
+                            TransactionType = 0
+                        },
+                        new
+                        {
+                            Id = "ae520b71-d7da-4195-9035-15888ac99ea2",
+                            AccountId = "2f115781-c0d2-4f98-a70b-0bc4ed01d780",
+                            TransactionAmount = 200m,
+                            TransactionDate = new DateTime(2024, 11, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8853),
+                            TransactionType = 0
+                        },
+                        new
+                        {
+                            Id = "42d29091-f1c2-4e18-b5b2-1c4f70a7a2a1",
+                            AccountId = "2f115781-c0d2-4f98-a70b-0bc4ed01d780",
+                            TransactionAmount = -100m,
+                            TransactionDate = new DateTime(2024, 10, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8856),
+                            TransactionType = 1
+                        },
+                        new
+                        {
+                            Id = "e0d1228c-758c-4a02-b3a3-4a3c74368090",
+                            AccountId = "2f115781-c0d2-4f98-a70b-0bc4ed01d780",
+                            TransactionAmount = 300m,
+                            TransactionDate = new DateTime(2024, 9, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8862),
+                            TransactionType = 0
+                        },
+                        new
+                        {
+                            Id = "8064a490-1156-4133-8f50-1ec261f9dceb",
+                            AccountId = "2f115781-c0d2-4f98-a70b-0bc4ed01d780",
+                            TransactionAmount = 100m,
+                            TransactionDate = new DateTime(2024, 8, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8866),
+                            TransactionType = 0
+                        },
+                        new
+                        {
+                            Id = "37803ae3-88c4-48ee-bb63-05cc94ff63a5",
+                            AccountId = "2f115781-c0d2-4f98-a70b-0bc4ed01d780",
+                            TransactionAmount = -200m,
+                            TransactionDate = new DateTime(2024, 7, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8870),
+                            TransactionType = 1
+                        },
+                        new
+                        {
+                            Id = "3cdb3d89-729c-4193-a70f-d449e4312f79",
+                            AccountId = "2f115781-c0d2-4f98-a70b-0bc4ed01d780",
+                            TransactionAmount = -200m,
+                            TransactionDate = new DateTime(2024, 6, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8873),
+                            TransactionType = 1
+                        },
+                        new
+                        {
+                            Id = "db9581f8-1e3d-4589-b4de-c86d75362a52",
+                            AccountId = "2f115781-c0d2-4f98-a70b-0bc4ed01d780",
+                            TransactionAmount = 300m,
+                            TransactionDate = new DateTime(2024, 5, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8877),
+                            TransactionType = 0
+                        },
+                        new
+                        {
+                            Id = "2d37e74c-d148-435b-a187-3ef9ff11533b",
+                            AccountId = "2f115781-c0d2-4f98-a70b-0bc4ed01d780",
+                            TransactionAmount = -200m,
+                            TransactionDate = new DateTime(2024, 4, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8883),
+                            TransactionType = 1
+                        },
+                        new
+                        {
+                            Id = "76f1dfc0-04b1-4805-81d6-dee23720be28",
+                            AccountId = "2f115781-c0d2-4f98-a70b-0bc4ed01d780",
+                            TransactionAmount = 800m,
+                            TransactionDate = new DateTime(2024, 3, 12, 15, 58, 20, 521, DateTimeKind.Local).AddTicks(8887),
                             TransactionType = 0
                         });
                 });
@@ -212,15 +305,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfilePicUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -230,18 +320,18 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "aa45e3c9-261d-41fe-a1b0-5b4dcf79cfd3",
-                            Email = "rassmasood@hotmail.com",
-                            FirstName = "Raas",
-                            LastName = "Masood",
+                            Id = "5b1aa188-636f-436a-a2da-ae742ddadedf",
+                            Email = "admin@patternstech.com",
+                            FirstName = "Patterns",
+                            LastName = "Tech",
                             ProfilePicUrl = "https://res.cloudinary.com/demo/image/upload/w_400,h_400,c_crop,g_face,r_max/w_200/lady.jpg"
                         },
                         new
                         {
-                            Id = "c651e237-102a-4de1-8c5a-d41c94079ff0",
-                            Email = "salman-dev@outlook.com",
-                            FirstName = "Salman",
-                            LastName = "Taj",
+                            Id = "52694168-6706-4595-bdea-bae0da5923f0",
+                            Email = "john.doe.ddd@outlook.com",
+                            FirstName = "John",
+                            LastName = "Doe",
                             ProfilePicUrl = "https://res.cloudinary.com/demo/image/upload/w_400,h_400,c_crop,g_face,r_max/w_200/lady.jpg"
                         });
                 });

@@ -1,7 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { userInfo } from 'os';
 import { Router } from '@angular/router';
+import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
+import { AuthenticationResult, EventMessage, EventType } from '@azure/msal-browser';
+import { filter, Subject, takeUntil } from 'rxjs';
+import { AppUser } from '../models/app-user';
+import { jwtDecode } from "jwt-decode";
+import { loginRequest } from '../auth-config';
 
 @Component({
   selector: 'app-login',
@@ -10,18 +16,15 @@ import { Router } from '@angular/router';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  constructor(private authService: AuthService, private router: Router) { }
-  login() {
-    this.authService.login()
-      .subscribe(user => {
-        console.log("Logged In User: " + user);
-        if (user) {
-          this.router.navigate(['/'])
-            .then(() => {
-              window.location.reload();
-            });
-        }
+  constructor(private router: Router) { }
 
-      });
+  private isLoginInProgress = false;
+
+   login() {
+    this.router.navigate(['/'])
+    .then(() => {
+      window.location.reload();
+    });
   }
 }
+

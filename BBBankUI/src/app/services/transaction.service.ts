@@ -11,6 +11,9 @@ export class TransactionService {
 
   constructor(private httpClient: HttpClient) { }
   getLast12MonthBalances(userId: string): Observable<LineGraphData> {
-    return this.httpClient.get<LineGraphData>(`${environment.apiBaseUrl}Transaction/GetLast12MonthBalances/${userId}`);
+    if (userId)
+      return this.httpClient.get<LineGraphData>(`${environment.apiBaseUrl}Transaction/GetLast12MonthBalances/${userId}`);
+    else
+      return this.httpClient.get<LineGraphData>(`${environment.apiBaseUrl}Transaction/GetLast12MonthBalances`);
   }
 }

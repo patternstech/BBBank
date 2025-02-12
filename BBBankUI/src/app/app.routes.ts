@@ -5,10 +5,11 @@ import { ManageAccountsComponent } from './bank-manager/manage-accounts/manage-a
 import { DepositFundsComponent } from './account-holder/deposit-funds/deposit-funds.component';
 import { TransferFundsComponent } from './account-holder/transfer-funds/transfer-funds.component';
 import { LoginComponent } from './login/login.component';
-import { authGuard } from './guards/auth.guard';
+
+import {  MsalGuard } from '@azure/msal-angular';
 
 export const routes: Routes = [
-    { path: '', component: DashboardComponent, canActivate: [authGuard] },
+    { path: '', component: DashboardComponent, canActivate: [MsalGuard] },
     {
         path: 'bank-manager',
         loadChildren: () => import('./bank-manager/bank-manager.module').then(m => m.BankManagerModule)
