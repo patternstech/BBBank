@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom, PLATFORM_ID, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, PLATFORM_ID, provideZoneChangeDetection, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes'; // Your routes
@@ -23,6 +23,11 @@ import {
   loginRequest // Make sure you import this
 } from './auth-config'; // Path to your auth config file
 import { isPlatformBrowser } from '@angular/common';
+import { provideStore } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { reducers } from './store/appstate.reducers';
+import { provideEffects } from '@ngrx/effects';
+import { AuthEffects } from './store/auth.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,25 +38,28 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(), withInterceptorsFromDi()),
     importProvidersFrom(MsalModule),
     {
-      provide: MSAL_INSTANCE,
-      useFactory: MSALInstanceFactory,
-      deps: [PLATFORM_ID]
+        provide: MSAL_INSTANCE,
+        useFactory: MSALInstanceFactory,
+        deps: [PLATFORM_ID]
     },
     {
-      provide: MSAL_INTERCEPTOR_CONFIG,
-      useFactory: MSALInterceptorConfigFactory
+        provide: MSAL_INTERCEPTOR_CONFIG,
+        useFactory: MSALInterceptorConfigFactory
     },
     {
-      provide: MSAL_GUARD_CONFIG,
-      useFactory: MSALGuardConfigFactory
+        provide: MSAL_GUARD_CONFIG,
+        useFactory: MSALGuardConfigFactory
     },
     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MsalInterceptor,
-      multi: true
+        provide: HTTP_INTERCEPTORS,
+        useClass: MsalInterceptor,
+        multi: true
     },
     MsalService,
     MsalGuard,
-    MsalBroadcastService
-  ]
+    MsalBroadcastService,
+    provideStore(reducers),
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    provideEffects([AuthEffects])
+]
 };

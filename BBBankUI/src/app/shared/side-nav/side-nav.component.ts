@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
+import { AppState } from '../../store/appstate.reducers';
+import { select, Store } from '@ngrx/store';
+import { isLoggedInUserAccountHolderSelector, isLoggedInUserManagerSelector } from '../../store/auth.selectors';
 
 @Component({
   selector: 'app-side-nav',
@@ -9,10 +13,16 @@ import { RouterModule } from '@angular/router';
   styleUrl: './side-nav.component.css'
 })
 export class SideNavComponent {
+  constructor(private store: Store<AppState>) { }
+  isLoggedInUserManager$: Observable<boolean>;
+  isLoggedInUserAccountHolder$: Observable<boolean>;
   loggedInUserRole: string;
   ngOnInit(): void {
-    if (typeof localStorage !== 'undefined') {
-    this.loggedInUserRole = JSON.parse(localStorage.getItem('loggedInUser') || '{}').roles[0];
-    }
+    this.isLoggedInUserManager$ = this.store.pipe(
+      select(isLoggedInUserManagerSelector)
+    );
+    this.isLoggedInUserAccountHolder$ = this.store.pipe(
+      select(isLoggedInUserAccountHolderSelector)
+    );
   }
 }

@@ -3,6 +3,11 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { AppUser } from '../../models/app-user';
 import { CommonModule } from '@angular/common';
 import { MsalService } from '@azure/msal-angular';
+import { AppState } from '../../store/appstate.reducers';
+import { select, Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import { isLoggedInSelector, loggedInUserNameSelector } from '../../store/auth.selectors';
+import { logoutAction } from '../../store/auth.actions';
 
 @Component({
   selector: 'app-toolbar',
@@ -11,25 +16,42 @@ import { MsalService } from '@azure/msal-angular';
   styleUrl: './toolbar.component.css'
 })
 export class ToolbarComponent implements OnInit {
-  @Input() inputSideNav:MatSidenav | undefined
+  @Input() inputSideNav: MatSidenav | undefined
   loggedInUser?: AppUser;
   isUserLoggedIn: boolean;
-  constructor(private authService: MsalService) {
+  isUserLoggedIn$: Observable<boolean>;
+  sub: Subscription;
+  fullName$: Observable<string>;
+  //fullName: string;
+  constructor(private authService: MsalService, private store: Store<AppState>) {
 
-   }
-   ngOnInit(): void {
-    if (typeof localStorage !== 'undefined') {
-      const userData = localStorage.getItem('loggedInUser');
-      this.loggedInUser = userData ? JSON.parse(userData) : undefined;
-      this.isUserLoggedIn = this.loggedInUser != undefined;
-    }
+  }
+  ngOnInit(): void {
+    this.fullName$ = this.store.pipe(select(loggedInUserNameSelector));
+    this.isUserLoggedIn$ = this.store.pipe(select(isLoggedInSelector));
+/*     this.sub = this.store.select(loggedInUserName)
+      .subscribe((loggedInUserName: any) => {
+        if (loggedInUserName != null) {
+          this.fullName = loggedInUserName;
+        }
+      }); */
+/*     this.sub = this.store.select(isLoggedIn)
+      .subscribe((isLoggedIn: any) => {
+        if (isLoggedIn != null) {
+          this.isUserLoggedIn = isLoggedIn;
+        }
+      }); */
   }
   logout(): void {
-    if (typeof localStorage !== 'undefined' ) {
+    this.store.dispatch(logoutAction());
+/*     if (typeof localStorage !== 'undefined') {
       localStorage.removeItem('loggedInUser');
     }
     this.authService.logoutRedirect({
-      postLogoutRedirectUri: '/login' // ✅ Redirect to a specific component
-    });
+      postLogoutRedirectUri: '/login'
+    }); */
   }
+/*   ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  } */
 }

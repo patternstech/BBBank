@@ -6,6 +6,9 @@ import { AuthenticationResult, EventMessage, EventType } from '@azure/msal-brows
 import { AppUser } from './models/app-user';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { AppState } from './store/appstate.reducers';
+import { Store } from '@ngrx/store';
+import { appLoadAction, loginSuccessAction } from './store/auth.actions';
 
 
 @Component({
@@ -18,18 +21,34 @@ export class AppComponent implements OnInit {
   title = 'BBBankUI';
   loggedInUser: AppUser;
   private readonly _destroying$ = new Subject<void>();
-  constructor(private authService: MsalService, private msalBroadcastService: MsalBroadcastService, private router: Router) { }
+  constructor(private authService: MsalService, private msalBroadcastService: MsalBroadcastService, private router: Router, private store: Store<AppState>) { }
   ngOnInit(): void {
+    const loggedInUser = localStorage.getItem('loggedInUser');
+
+    if (loggedInUser) {
+
+      this.store.dispatch(
+        appLoadAction({ loggedInUser: JSON.parse(loggedInUser) })
+      );
+    }
     this.msalBroadcastService.msalSubject$
       .pipe(
         filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS),
         takeUntil(this._destroying$),
       )
-      .subscribe((result: EventMessage) => {
-        const payload = result.payload as AuthenticationResult;
-        this.authService.instance.setActiveAccount(payload.account);
-        if (payload.account.homeAccountId) {
-          this.setLoggedInUser(payload.accessToken);
+      .subscribe({
+        next: (result: EventMessage) => {
+          const payload = result.payload as AuthenticationResult;
+          this.authService.instance.setActiveAccount(payload.account);
+          if (payload.account.homeAccountId) {
+            this.setLoggedInUser(payload.accessToken);
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+        complete: () => {
+          this.store.dispatch(loginSuccessAction({ loggedInUser: this.loggedInUser }));
         }
       });
   }
@@ -45,7 +64,7 @@ export class AppComponent implements OnInit {
       roles: tokenInfo.roles,
     } as AppUser;
     if (this.loggedInUser.roles.includes('bank-manager')) {
-      this.loggedInUser.id = null; 
+      this.loggedInUser.id = null;
     }
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser));
