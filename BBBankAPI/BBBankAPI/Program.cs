@@ -9,6 +9,7 @@ using Entites;
 using Azure.Identity;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Identity.Web;
+using AutoWrapper;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -63,6 +64,7 @@ builder.Services.AddMicrosoftIdentityWebApiAuthentication(configuration, "AzureA
 var app = builder.Build();
 app.UseCors(MyAllowSpecificOrigins);
 // Configure the HTTP request pipeline.
+app.UseApiResponseAndExceptionWrapper();
 app.UseAuthentication();
 app.UseAuthorization();
 

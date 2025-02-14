@@ -15,8 +15,8 @@ export class DashBoardEffects {
                 ofType(loadLast12MonthsBalancesAction),
                 concatMap((action) =>
                     this.transactionService.getLast12MonthBalances(action.userId).pipe(
-                        map((lineGraphData) =>
-                            last12MonthsBalancesLoadedAction({ lineGraphData })
+                        map((response) =>
+                            last12MonthsBalancesLoadedAction({ lineGraphData: response.result.data })
                         ),
                         catchError((err) => {
                             return of(last12MonthsBalancesLoadErrorAction());

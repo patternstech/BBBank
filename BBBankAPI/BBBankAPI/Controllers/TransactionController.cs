@@ -21,11 +21,11 @@ namespace BBBankAPI.Controllers
         {
             try
             {
-                return new OkObjectResult(await _transactionService.GetLast12MonthBalances(null));
+                return new OkObjectResult(new { message = "Last 12 Month Balances retrieved.", data = await _transactionService.GetLast12MonthBalances(null) });
             }
             catch (Exception ex)
             {
-                return new BadRequestObjectResult(ex);
+                return BadRequest(ex.Message);
             }
         }
         [Authorize(Roles = "account-holder")]
@@ -35,11 +35,11 @@ namespace BBBankAPI.Controllers
         {
             try
             {
-                return new OkObjectResult(await _transactionService.GetLast12MonthBalances(userId));
+                return new OkObjectResult(new { message = "Last 12 Month Balances retrieved.", data = await _transactionService.GetLast12MonthBalances(userId) });
             }
             catch (Exception ex)
             {
-                return new BadRequestObjectResult(ex);
+                return BadRequest(ex.Message);
             }
         }
     }
