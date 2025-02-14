@@ -31,3 +31,8 @@ export const isLoggedInSelector = createSelector(
         selectGlobalState,
         (globalState) => globalState.loggedInUser?.firstName + ' ' + globalState.loggedInUser?.lastName
     );
+
+    export const loggedInUserIdSelector = createSelector(
+        selectGlobalState,
+        (globalState) => globalState.loggedInUser?.roles.includes('bank-manager') ? null : globalState.loggedInUser?.id
+    );
