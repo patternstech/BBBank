@@ -16,3 +16,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-drawer-content {
+  overflow: hidden !important;
+}
+.mat-drawer-container {
+  background-color: #1e1e2f;
+
+}
+.mat-drawer {
+  background-color: #1e1e2f;
+}
+

@@ -10,6 +10,7 @@ using Azure.Identity;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Identity.Web;
 using AutoWrapper;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -53,9 +54,13 @@ builder.Services.Configure<Settings>(configuration.GetSection("BBBankAPI:Setting
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IAccountsService, AccountsService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(SQLRepository<>));
 builder.Services.AddScoped<DbContext, BBBankContext>();
-
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 builder.Services.AddDbContext<BBBankContext>(
 b => b.UseSqlServer(connectionString, options => options.EnableRetryOnFailure())
 .UseLazyLoadingProxies(false)

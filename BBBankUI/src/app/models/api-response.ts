@@ -1,4 +1,4 @@
-export interface ApiResponse<T> {
+export interface ApiResponse<T = undefined> {
     statusCode: number;
     message: string;
     result?: { 
