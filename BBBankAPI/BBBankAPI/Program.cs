@@ -11,6 +11,11 @@ using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Identity.Web;
 using AutoWrapper;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using BBBankAPI;
+using System.Reflection;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -57,15 +62,24 @@ builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(SQLRepository<>));
 builder.Services.AddScoped<DbContext, BBBankContext>();
-builder.Services.Configure<ApiBehaviorOptions>(options =>
-{
-    options.SuppressModelStateInvalidFilter = true;
-});
+//builder.Services.Configure<ApiBehaviorOptions>(options =>
+//{
+//    options.SuppressModelStateInvalidFilter = true;
+//});
 builder.Services.AddDbContext<BBBankContext>(
 b => b.UseSqlServer(connectionString, options => options.EnableRetryOnFailure())
 .UseLazyLoadingProxies(false)
 );
 builder.Services.AddMicrosoftIdentityWebApiAuthentication(configuration, "AzureAd");
+var mapperConfig = new MapperConfiguration(mapperConfig =>
+{
+    mapperConfig.AddProfile(new MappingProfiles());
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 var app = builder.Build();
 app.UseCors(MyAllowSpecificOrigins);
 // Configure the HTTP request pipeline.

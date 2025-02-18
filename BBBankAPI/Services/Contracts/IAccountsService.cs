@@ -1,4 +1,5 @@
 ﻿using Entites;
+using Entites.RequestModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Services.Contracts
 {
     public interface IAccountsService
     {
-        Task OpenAccount(Account account);
+        Task OpenAccount(OpenAccountRequest account);
     }
 }

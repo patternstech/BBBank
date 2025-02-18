@@ -1,4 +1,5 @@
 ﻿using Entites;
+using Entites.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 
@@ -15,7 +16,7 @@ namespace BBBankAPI.Controllers
         }
         [HttpPost]
         [Route("OpenAccount")]
-        public async Task<ActionResult> OpenAccount(Account account)
+        public async Task<ActionResult> OpenAccount([FromBody] OpenAccountRequest account)
         {
             try
             {
