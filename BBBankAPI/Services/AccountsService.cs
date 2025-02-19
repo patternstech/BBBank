@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Entites;
 using Entites.RequestModels;
+using Entites.ResponseModels;
 using Infrastructure.Contracts;
 using Services.Contracts;
 using System;
@@ -20,6 +21,43 @@ namespace Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
+        public async Task DepositFunds(DepositRequest depositRequest)
+        {
+            var account = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountNumber == depositRequest.AccountNumber, "Transactions");
+            var transaction = new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                TransactionAmount = depositRequest.Amount,
+                TransactionDate = DateTime.UtcNow,
+                TransactionType = TransactionType.Deposit
+            };
+            account.Transactions.Add(transaction);
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task<AccountInfoByUserResponse> GetAccountInfoByUser(string userId)
+        {
+            var account = await _unitOfWork.AccountRepository.FindAsync(x => x.UserId == userId, "User");
+            if (account == null)
+                return null;
+            var transactions = await _unitOfWork.TransactionRepository.FindAllAsync(x => x.Account.User.Id == userId);
+            var currentBlanace = transactions.Sum(x => x.TransactionAmount);
+
+            var accountInfoByUser = _mapper.Map<AccountInfoByUserResponse>(account);
+            accountInfoByUser.CurrentBalance = currentBlanace;
+            //return new AccountInfoByUserResponse()
+            //{
+            //    AccountNumber = account.AccountNumber,
+            //    AccountStatus = account.AccountStatus,
+            //    AccountTitle = account.AccountTitle,
+            //    CurrentBalance = currentBlanace,
+            //    UserImageUrl = account.User.ProfilePicUrl
+            //};
+            return accountInfoByUser;
+
+        }
+
         public async Task OpenAccount(OpenAccountRequest accountRequest)
         {
 

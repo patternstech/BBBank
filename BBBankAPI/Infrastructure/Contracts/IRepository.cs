@@ -16,6 +16,7 @@ namespace Infrastructure.Contracts
         void DeleteAsync(TEntity t);
         Task<List<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> match, string[] includes = null);
         Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> match);
+        Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> match, string include = null);
         Task<List<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes);
         Task<TEntity> GetAsync(string id, string include = null);
         Task<TEntity> GetAsync(string id, string[] includes = null);

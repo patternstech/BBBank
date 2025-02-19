@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Entites;
 using Entites.RequestModels;
+using Entites.ResponseModels;
 
 namespace BBBankAPI
 {
@@ -9,6 +10,7 @@ namespace BBBankAPI
         public MappingProfiles()
         {
             CreateMap<OpenAccountRequest, Account>();
+            CreateMap<Account, AccountInfoByUserResponse>();
         }
     }
 }

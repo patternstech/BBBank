@@ -133,5 +133,9 @@ namespace Infrastructure
         {
             return await DbSet.AnyAsync(match);
         }
+        public async Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> match, string include = null)
+        {
+            return await DbSet.Include(include).SingleOrDefaultAsync(match);
+        }
     }
 }

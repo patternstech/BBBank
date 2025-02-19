@@ -20,7 +20,9 @@ export class AuthEffects {
             ofType(logoutAction),
             tap(() => {
                 localStorage.removeItem('loggedInUser');
-                this.authService.logout();
+                this.authService.logoutRedirect({
+                    postLogoutRedirectUri: '/login'
+                  });
             })
         ), { dispatch: false });
     }

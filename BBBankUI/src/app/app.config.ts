@@ -28,6 +28,8 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { reducers } from './store/appstate.reducers';
 import { provideEffects } from '@ngrx/effects';
 import { AuthEffects } from './store/auth.effects';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideToastr } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -60,6 +62,11 @@ export const appConfig: ApplicationConfig = {
     MsalBroadcastService,
     provideStore(reducers),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    provideEffects([AuthEffects])
+    provideEffects([AuthEffects]),
+    provideToastr({
+      timeOut: 3000, // Auto-dismiss after 3 seconds
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    }),
 ]
 };
