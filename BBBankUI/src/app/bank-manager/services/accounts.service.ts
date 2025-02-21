@@ -4,6 +4,7 @@ import { Account } from '../../models/account';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { ApiResponse } from '../../models/api-response';
+import { AccountsListResponse } from '../../models/accounts-list-response';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +19,9 @@ export class AccountsService {
       })
     }
     return this.httpClient.post<ApiResponse>(`${environment.apiBaseUrl}Accounts/OpenAccount`, JSON.stringify(account), headers);
+  }
+  getAllAccountsPaginated(pageIndex: number, pageSize: number): Observable<ApiResponse<AccountsListResponse>> {
+    return this.httpClient.get<ApiResponse<AccountsListResponse>>
+    (`${environment.apiBaseUrl}Accounts/GetAllAccountsPaginated?pageIndex=${pageIndex}&pageSize=${pageSize}`);
   }
 }

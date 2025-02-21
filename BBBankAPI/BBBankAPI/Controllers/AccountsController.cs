@@ -1,4 +1,5 @@
-﻿using Entites;
+﻿using AutoWrapper.Wrappers;
+using Entites;
 using Entites.RequestModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -53,5 +54,21 @@ namespace BBBankAPI.Controllers
             return new OkObjectResult(new { message = $"{depositRequest.Amount}$ Deposited" });
 
         }
+        [HttpGet]
+        [Route("GetAllAccountsPaginated")]
+        public async Task<ActionResult> GetAllAccountsPaginated([FromQuery] int pageIndex, [FromQuery] int pageSize)
+        {
+            try
+            {
+                var result = await _accountsService.GetAllAccountsPaginated(pageIndex, pageSize);
+                return new OkObjectResult(new { message = $"{result.Accounts.Count()} of " + result.ResultCount + " accounts returned.", data = result });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

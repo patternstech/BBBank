@@ -23,5 +23,8 @@ namespace Infrastructure.Contracts
         Task<TEntity> GetAsync(string id);
         Task<TEntity> UpdateAsync(TEntity updated);
         Task<bool> Exists(Expression<Func<TEntity, bool>> match);
+        Task<List<TEntity>> GetPagedAsync(int pageIndex, int pageSizes, string include = null);
+
+
     }
 }

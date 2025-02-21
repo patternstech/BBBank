@@ -58,6 +58,18 @@ namespace Services
 
         }
 
+        public async Task<AccountsListResponse> GetAllAccountsPaginated(int pageIndex, int pageSize)
+        {
+
+            var totalCount = await _unitOfWork.AccountRepository.CountAsync();
+            var accounts = await _unitOfWork.AccountRepository.GetPagedAsync(pageIndex, pageSize, "User");
+            return new AccountsListResponse
+            {
+                Accounts = accounts,
+                ResultCount = totalCount
+            };
+        }
+
         public async Task OpenAccount(OpenAccountRequest accountRequest)
         {
 

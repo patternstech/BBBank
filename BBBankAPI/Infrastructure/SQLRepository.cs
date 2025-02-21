@@ -137,5 +137,27 @@ namespace Infrastructure
         {
             return await DbSet.Include(include).SingleOrDefaultAsync(match);
         }
+        public async Task<List<TEntity>> GetPagedAsync(
+    int pageIndex,
+    int pageSize,
+   string include = null)
+        {
+            var query = DbSet.AsQueryable();
+
+            // Include navigation properties if provided
+            if (include != null)
+            {
+              
+                    query = query.Include(include);
+                
+            }
+
+            // Apply pagination
+            return await query
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
     }
 }

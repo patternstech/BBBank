@@ -42,6 +42,11 @@ namespace Infrastructure
                         ProfilePicUrl = "https://res.cloudinary.com/demo/image/upload/w_400,h_400,c_crop,g_face,r_max/w_200/lady.jpg"   // Profile Image URL
 
                     });
+                    for (int i = 3; i < 23; i++)
+                    {
+                        b.HasData(new User { Id = i.ToString(), FirstName = "Fake", LastName = "Fake", Email = "fake@fake.com", PhoneNumber = i.ToString() + "998877665", ProfilePicUrl = "https://images.freeimages.com/images/premium/previews/1670/16703169-disgusted-lounge-singer.jpg" });
+
+                    }
                 });
                 b.HasData(new Account
                 {
@@ -62,6 +67,11 @@ namespace Infrastructure
                     AccountStatus = AccountStatus.Active,           // Account status
                     UserId = "52694168-6706-4595-bdea-bae0da5923f0" // Forign Key of User
                 });
+                for (int i = 3; i < 23; i++)
+                {
+                    b.HasData(new Account { UserId = i.ToString(), Id = Guid.NewGuid().ToString(), AccountNumber = i.ToString() + "-xxx-xxx", AccountStatus = AccountStatus.InActive, CurrentBalance = i * 100, AccountTitle = "Fake Account " + i.ToString() });
+
+                }
 
             });
             modelBuilder.Entity<Transaction>().HasData(

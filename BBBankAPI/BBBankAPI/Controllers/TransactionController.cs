@@ -57,6 +57,7 @@ namespace BBBankAPI.Controllers
             }
             catch (Exception ex)
             {
+                telemetryClient.TrackException(ex);
                 return BadRequest(ex.Message);
             }
         }
