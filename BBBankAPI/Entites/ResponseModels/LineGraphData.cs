@@ -16,5 +16,6 @@ namespace Entites.ResponseModels
         public decimal TotalBalance { get; set; }
         public ICollection<string> Labels { get; set; }
         public ICollection<decimal> Figures { get; set; }
+        public decimal? Average { get; set; }
     }
 }

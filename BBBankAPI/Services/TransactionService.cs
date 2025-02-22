@@ -2,11 +2,13 @@
 using Entites.ResponseModels;
 using Infrastructure;
 using Infrastructure.Contracts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -16,12 +18,15 @@ namespace Services
 {
     public class TransactionService : ITransactionService
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork _unitOfWork;
         public Settings _settings { get; }
-        public TransactionService(IUnitOfWork unitOfWork, IOptionsSnapshot<Settings> options)
+
+        public TransactionService(IUnitOfWork unitOfWork, IOptionsSnapshot<Settings> options, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _settings = options.Value;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<LineGraphData> GetLast12MonthBalances(string userId)
         {
@@ -38,6 +43,7 @@ namespace Services
             }
             if (allTransactions.Any())
             {
+                var apiVersion = GetRequestedApiVersion();
                 var totalBalance = allTransactions.Sum(x => x.TransactionAmount);
                 lineGraphData.TotalBalance = totalBalance;
                 decimal lastMonthTotal = 0;
@@ -51,9 +57,23 @@ namespace Services
                     lastMonthTotal = runningTotal;
 
                 }
+                if (apiVersion == "v2")
+                {
+                    lineGraphData.Average = lineGraphData.Figures.Average();
+                }
 
             }
             return lineGraphData;
         }
+        public string GetRequestedApiVersion()
+        {
+            var path = _httpContextAccessor.HttpContext?.Request.Path.Value;
+
+            return path?.Split('/')
+                        .FirstOrDefault(segment => segment.StartsWith("v", StringComparison.OrdinalIgnoreCase))
+                        ?? "v1";
+        }
+
+
     }
 }
