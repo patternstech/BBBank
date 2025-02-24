@@ -15,6 +15,9 @@ export class AccountsService {
   getAccountByUserInfo(userId: string): Observable<ApiResponse> {
     return this.httpClient.get<ApiResponse>(`${environment.apiBaseUrl}Accounts/GetAccountInfoByUser/${userId}`);
   }
+  getAccountByAccountNumber(accountNumber: string): Observable<ApiResponse> {
+    return this.httpClient.get<ApiResponse>(`${environment.apiBaseUrl}Accounts/GetAccountInfoByAccountNumber/${accountNumber}`);
+  }
   deposit(depositRequest: DepositRequest): Observable<ApiResponse> {
     const headers = {
       headers: new HttpHeaders({

@@ -1,4 +1,5 @@
 ﻿using Entites;
+using Entites.RequestModels;
 using Entites.ResponseModels;
 using Infrastructure;
 using Infrastructure.Contracts;
@@ -65,7 +66,31 @@ namespace Services
             }
             return lineGraphData;
         }
-        public string GetRequestedApiVersion()
+        public async Task TransferFunds(TransferRequest transferRequest)
+        {
+            var accountFrom = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountNumber == transferRequest.SenderAccountNumber, "Transactions");
+            var transactionFrom = new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                TransactionAmount = -(transferRequest.TransferAmount),
+                TransactionDate = DateTime.UtcNow,
+                TransactionType = TransactionType.Withdraw
+            };
+            accountFrom.Transactions.Add(transactionFrom);
+
+            var accountTo = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountNumber == transferRequest.ReceiverAccountNumber, "Transactions");
+            var transactionTo = new Transaction()
+            {
+                Id = Guid.NewGuid().ToString(),
+                TransactionAmount = transferRequest.TransferAmount,
+                TransactionDate = DateTime.UtcNow,
+                TransactionType = TransactionType.Deposit
+            };
+            accountTo.Transactions.Add(transactionTo);
+
+            await _unitOfWork.CommitAsync();
+        }
+        private string GetRequestedApiVersion()
         {
             var path = _httpContextAccessor.HttpContext?.Request.Path.Value;
 

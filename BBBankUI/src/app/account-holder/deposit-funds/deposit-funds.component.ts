@@ -34,9 +34,9 @@ export class DepositFundsComponent implements OnInit {
 
     this.accountsService.getAccountByUserInfo(this.loggedInUserId)
       .subscribe({
-        next: (data: ApiResponse<AccountByUserInfo>) => {
-          this.accountByUserInfo = data.result?.data;
-          this.toastrService.success(data.result.message, "Account");
+        next: (response: ApiResponse<AccountByUserInfo>) => {
+          this.accountByUserInfo = response.result?.data;
+          this.toastrService.success(response.result.message, "Account");
         },
         error: (error) => {
           console.log(error);

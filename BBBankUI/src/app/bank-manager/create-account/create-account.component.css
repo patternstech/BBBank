@@ -349,8 +349,12 @@ a.btn-change-avatar:hover, a.btn-change-avatar:focus, a.btn-change-avatar:active
 .btn-cancel{
     float: right;
     width: 300px;
-    background-color: gray;
+    background-color: #939297;
 }
 .btn-create{
     width: 300px;
+}
+input::placeholder {
+  color: gray; /* Change to your desired color */
+  opacity: 1;  /* Ensure full opacity */
 }

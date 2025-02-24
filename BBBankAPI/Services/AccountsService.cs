@@ -57,6 +57,17 @@ namespace Services
             return accountInfoByUser;
 
         }
+        public async Task<AccountInfoByAccountNumberResponse> GetAccountInfoByAccountNumber(string accountNumber)
+        {
+            var account = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountNumber == accountNumber, "User");
+            if (account == null)
+                return null;
+
+            var accountInfoByAccountNumber = _mapper.Map<AccountInfoByAccountNumberResponse>(account);
+
+            return accountInfoByAccountNumber;
+
+        }
 
         public async Task<AccountsListResponse> GetAllAccountsPaginated(int pageIndex, int pageSize)
         {

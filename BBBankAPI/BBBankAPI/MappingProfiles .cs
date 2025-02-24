@@ -11,6 +11,7 @@ namespace BBBankAPI
         {
             CreateMap<OpenAccountRequest, Account>();
             CreateMap<Account, AccountInfoByUserResponse>();
+            CreateMap<Account, AccountInfoByAccountNumberResponse>();
         }
     }
 }

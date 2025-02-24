@@ -7,7 +7,15 @@ using System.Threading.Tasks;
 
 namespace Entites.ResponseModels
 {
-    public class AccountInfoByUserResponse
+    public class AccountInfoByUserResponse : AccountInfoResponse
+    {
+
+    }
+    public class AccountInfoByAccountNumberResponse : AccountInfoResponse
+    {
+
+    }
+    public class AccountInfoResponse
     {
         public string AccountNumber { get; set; }
         public string AccountTitle { get; set; }

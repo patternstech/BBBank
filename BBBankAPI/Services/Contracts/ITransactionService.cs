@@ -1,4 +1,5 @@
-﻿using Entites.ResponseModels;
+﻿using Entites.RequestModels;
+using Entites.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace Services.Contracts
     public interface ITransactionService
     {
         Task<LineGraphData> GetLast12MonthBalances(string userId);
+        Task TransferFunds(TransferRequest transferRequest);
     }
 }

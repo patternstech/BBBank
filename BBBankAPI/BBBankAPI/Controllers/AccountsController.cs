@@ -53,7 +53,6 @@ namespace BBBankAPI.Controllers
         [Authorize(Roles = "account-holder")]
         [HttpGet]
         [Route("GetAccountInfoByUser/{userId}")]
-        [ApiExplorerSettings(GroupName = "v1")]
         public async Task<ActionResult> GetAccountInfoByUser(string userId)
         {
 
@@ -61,6 +60,18 @@ namespace BBBankAPI.Controllers
             if (account == null)
                 return new BadRequestObjectResult($"no Account exists with userId {userId}");
             return new OkObjectResult(new { message = "Account By User Returned", data = account });
+
+        }
+       // [Authorize(Roles = "account-holder")]
+        [HttpGet]
+        [Route("GetAccountInfoByAccountNumber/{accountNumber}")]
+        public async Task<ActionResult> GetAccountInfoByAccountNumber(string accountNumber)
+        {
+
+            var account = await _accountsService.GetAccountInfoByAccountNumber(accountNumber);
+            if (account == null)
+                return new BadRequestObjectResult($"no Account exists with accountNumber {accountNumber}");
+            return new OkObjectResult(new { message = "Account By Account Number Returned", data = account });
 
         }
         /// <summary>

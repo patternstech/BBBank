@@ -188,3 +188,10 @@
     font-weight: 300;
     margin-bottom: 1px;
 }
+.btn-cancel{
+    background-color: #939297;
+}
+input::placeholder {
+    color: gray; /* Change to your desired color */
+    opacity: 1;  /* Ensure full opacity */
+  }

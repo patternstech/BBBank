@@ -1,1 +1,93 @@
-<p>transfer-funds works!</p>
+<div class="row">
+    <div class="col-12 col-sm-6">
+
+        <div class="card card-user">
+            <div class="card-body">
+                <div class="author">
+                    <div class="block block-one"></div>
+                    <div class="block block-two"></div>
+                    <div class="block block-three"></div>
+                    <div class="block block-four"></div>
+
+                    <img alt="..." class=" avatar" src="{{loggedInUserAccountInfo?.userImageUrl}}" />
+                    <h5 class="title">{{loggedInUserAccountInfo?.accountTitle}}</h5>
+                    <p class="account-number">{{loggedInUserAccountInfo?.accountNumber}}</p>
+                    <p class="balance">Balance: <b>{{loggedInUserAccountInfo?.currentBalance | currency}}</b> <span
+                            *ngIf="loggedInUserAccountInfo?.accountStatus === 'Active'"
+                            class="account-status active">Active</span><span
+                            *ngIf="loggedInUserAccountInfo?.accountStatus === 'InActive'"
+                            class="account-status inactive">Inactive</span></p>
+
+                </div>
+                <div class="card-description">&nbsp;</div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-12 col-sm-6">
+
+        <div class="card card-user">
+            <div class="card-body">
+                <div class="author">
+                    <div class="block block-one"></div>
+                    <div class="block block-two"></div>
+                    <div class="block block-three"></div>
+                    <div class="block block-four"></div>
+
+                    <img alt="..." class=" avatar" src="{{receiverAccountInfo?.userImageUrl}}" />
+                    <h5 class="title">{{receiverAccountInfo?.accountTitle}}</h5>
+                    <p class="account-number"></p>
+                    <p class="balance"> <span class="account-status active"  *ngIf="receiverAccountInfo?.accountStatus === 'Active'">Active</span><span
+                            class="account-status inactive" *ngIf="receiverAccountInfo?.accountStatus === 'InActive'">Inactive</span></p>
+                    <div class="amount-cont">
+                        <div class="form-row">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-8 my-1">
+                                <input type="text" style="margin-left: 50%; width: 240px;" class="form-control"
+                                    id="depositAccountNumber" placeholder="Account number" #accountInput>
+                            </div>
+                            <div class="col-sm-2"></div>
+                        </div>
+                    </div>
+                    <div class="amount-cont">
+                        <div class="form-row">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-8 my-1">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend" style="margin-left: 50%">
+                                        <div class="input-group-text">$</div>
+                                    </div>
+                                    <input type="number" [(ngModel)]="transferRequest.transferAmount" class="form-control align-self-center" id="transferAmount"
+                                        placeholder="Transfer Amount">
+                                </div>
+                            </div>
+                            <div class="col-sm-2"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-description">&nbsp;</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="error-message" *ngIf="receiverAccountInfo == null">
+            <p class="text-warning" >
+                Account to be deposited is not loaded.
+            </p>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 mb-3">
+                <button class="btn btn-cancel btn-block" (click)="initialize()"
+                    style="width: 30%;margin-left: 70%;">Cancel</button>
+            </div>
+            <div class="col-sm-6 mb-3">
+                <button class="btn btn-danger btn-block" (click)="transfer()" style="width: 30%"  [disabled]="receiverAccountInfo == null">Transfer</button>
+            </div>
+        </div>
+
+    </div>
+</div>
