@@ -28,6 +28,7 @@ namespace BBBankAPI.Controllers
         /// </remarks>
         [HttpPost]
         [Route("OpenAccount")]
+        [Authorize(Roles = "bank-manager")]
         public async Task<ActionResult> OpenAccount([FromBody] OpenAccountRequest account)
         {
             try
@@ -62,7 +63,7 @@ namespace BBBankAPI.Controllers
             return new OkObjectResult(new { message = "Account By User Returned", data = account });
 
         }
-       // [Authorize(Roles = "account-holder")]
+        [Authorize(Roles = "account-holder")]
         [HttpGet]
         [Route("GetAccountInfoByAccountNumber/{accountNumber}")]
         public async Task<ActionResult> GetAccountInfoByAccountNumber(string accountNumber)
@@ -102,6 +103,7 @@ namespace BBBankAPI.Controllers
         /// This endpoint allows retrieval of accounts in a paginated manner, specifying the page index and size through query parameters.
         /// </remarks>
         [HttpGet]
+        [Authorize(Roles = "bank-manager")]
         [Route("GetAllAccountsPaginated")]
         public async Task<ActionResult> GetAllAccountsPaginated([FromQuery] int pageIndex, [FromQuery] int pageSize)
         {

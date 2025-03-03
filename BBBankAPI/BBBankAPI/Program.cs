@@ -21,6 +21,7 @@ using Serilog.Events;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Asp.Versioning;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,12 +79,13 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(MyAllowSpecificOrigins, builder => builder
-                  .WithOrigins("http://localhost:4200", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+                  .WithOrigins("http://localhost:4200")
                   .AllowAnyMethod()
                   .AllowAnyHeader()
                   .AllowCredentials()
        );
 });
+
 
 var configuration = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -91,6 +93,7 @@ var configuration = new ConfigurationBuilder()
             .AddAzureAppConfiguration(options =>
              {
                  options.Connect(builder.Configuration["ConnectionStrings:AzureAppConfigConnString"])
+                //  .Select("AzureSignalRConnectionString", LabelFilter.Null)
                     //.Select("BBBankFunctions*", LabelFilter.Null)
                     //.ConfigureRefresh(refresh =>
                     // {
@@ -103,6 +106,10 @@ var configuration = new ConfigurationBuilder()
                     });
              })
              .Build();
+
+var signalRconnectionString = configuration["AzureSignalRConnectionString"];
+
+builder.Services.AddSignalR().AddAzureSignalR(signalRconnectionString);
 
 var connectionString = configuration["BBBankDBConnString"];
 
@@ -154,12 +161,29 @@ if (app.Environment.IsDevelopment())
 
 }
 
-app.UseCors(MyAllowSpecificOrigins);
+
 // Configure the HTTP request pipeline.
-app.UseApiResponseAndExceptionWrapper();
+
+
+app.UseRouting();
+app.UseCors(MyAllowSpecificOrigins);
+app.UseWhen(
+    context => !context.Request.Path.StartsWithSegments("/api/graphUpdates"),
+    branch =>
+    {
+        branch.UseApiResponseAndExceptionWrapper();
+    }
+);
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<UpdateHub>("/api/graphUpdates");
+});
+
+
 
 app.Run();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SharedModule } from './shared/shared.module';
 import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
 import { filter, Subject, takeUntil } from 'rxjs';
@@ -9,6 +9,7 @@ import { jwtDecode } from 'jwt-decode';
 import { AppState } from './store/appstate.reducers';
 import { Store } from '@ngrx/store';
 import { appLoadAction, loginSuccessAction } from './store/auth.actions';
+import { SignalrService } from './services/signalr.service';
 
 
 @Component({
@@ -17,12 +18,14 @@ import { appLoadAction, loginSuccessAction } from './store/auth.actions';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'BBBankUI';
   loggedInUser: AppUser;
   private readonly _destroying$ = new Subject<void>();
-  constructor(private authService: MsalService, private msalBroadcastService: MsalBroadcastService, private router: Router, private store: Store<AppState>) { }
+  constructor(private authService: MsalService, private msalBroadcastService: MsalBroadcastService, private router: Router, private store: Store<AppState>, private signalRService: SignalrService) { }
   ngOnInit(): void {
+
+    this.signalRService.connectToUpdateHub();
     const loggedInUser = localStorage.getItem('loggedInUser');
 
     if (loggedInUser) {
@@ -67,6 +70,7 @@ export class AppComponent implements OnInit {
       this.loggedInUser.id = null;
     }
     if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('access_token', accessToken);
       localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser));
     }
     this.router.navigate(['/'])

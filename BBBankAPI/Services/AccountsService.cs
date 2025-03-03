@@ -3,10 +3,13 @@ using Entites;
 using Entites.RequestModels;
 using Entites.ResponseModels;
 using Infrastructure.Contracts;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,12 +17,16 @@ namespace Services
 {
     public class AccountsService : IAccountsService
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHubContext<UpdateHub> _hubContext;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        public AccountsService(IUnitOfWork unitOfWork, IMapper mapper)
+        public AccountsService(IUnitOfWork unitOfWork, IMapper mapper, IHubContext<UpdateHub> hubContext, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _hubContext = hubContext;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task DepositFunds(DepositRequest depositRequest)
@@ -34,6 +41,9 @@ namespace Services
             };
             account.Transactions.Add(transaction);
             await _unitOfWork.CommitAsync();
+            string userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            await _hubContext.Clients.User(userId).SendAsync("updateGraphsData");
         }
 
         public async Task<AccountInfoByUserResponse> GetAccountInfoByUser(string userId)

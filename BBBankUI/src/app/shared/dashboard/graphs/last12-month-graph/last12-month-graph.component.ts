@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CategoryScale, Chart, LinearScale, registerables } from 'chart.js';
 import { AppUser } from '../../../../models/app-user';
 import { LineGraphData } from '../../../../models/line-graph-data';
@@ -15,13 +15,12 @@ Chart.register(...registerables);
   templateUrl: './last12-month-graph.component.html',
   styleUrl: './last12-month-graph.component.css'
 })
-export class Last12MonthGraphComponent implements OnInit, AfterViewInit {
+export class Last12MonthGraphComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('chartBig1') myCanvas: ElementRef;
   lineGraphData$: Observable<LineGraphData>;
   last12MonthBalancesSub: Subscription;
   lineGraphData: LineGraphData;
   gradientChartOptionsConfigurationWithTooltipRed: any;
-  loggedInUser?: AppUser;
   public context: CanvasRenderingContext2D;
   myChart: any;
   constructor(private store: Store<AppState>) {
@@ -29,22 +28,14 @@ export class Last12MonthGraphComponent implements OnInit, AfterViewInit {
       responsive: true,
       maintainAspectRatio: false,
       legend: {
-        display: false,
+        display: true,
       },
       tooltips: {
         backgroundColor: 'f5f5f5',
         titleFontColor: '333',
         bodyFontColor: '666',
       },
-      scales: {
-        yAxes: {
-          ticks: {
-            beginAtZero: true,
-            suggestedMin: 60,
-            suggestedMax: 125,
-          },
-        },
-      }
+
     }
   }
   ngOnInit(): void {
@@ -106,5 +97,11 @@ export class Last12MonthGraphComponent implements OnInit, AfterViewInit {
           console.log(error);
         },
       });
+  }
+  ngOnDestroy(): void {
+    this.last12MonthBalancesSub.unsubscribe();
+    if (this.myChart) {
+      this.myChart.destroy();
+    }
   }
 }

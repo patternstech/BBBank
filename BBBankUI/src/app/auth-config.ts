@@ -19,7 +19,7 @@ export const msalConfig: Configuration = {
             loggerCallback(logLevel: LogLevel, message: string) {
                 console.log(message);
             },
-            logLevel: LogLevel.Verbose, // Different levels of logs are available . 'Verbose' will have most detailed information. 
+            logLevel: LogLevel.Error, // Different levels of logs are available . 'Verbose' will have most detailed information. 
             piiLoggingEnabled: false,
         }
     }

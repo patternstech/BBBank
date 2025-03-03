@@ -62,6 +62,7 @@ namespace BBBankAPI.Controllers
         /// </remarks>
         [HttpGet]
         [Route("GetLast12MonthBalances/{userId}")]
+        [Authorize(Roles = "account-holder")]
         public async Task<ActionResult> GetLast12MonthBalances(string userId)
         {
             try
@@ -111,17 +112,28 @@ namespace BBBankAPI.Controllers
         }
         [HttpPost]
         [Route("TransferFunds")]
+        [Authorize(Roles = "account-holder")]
         public async Task<ActionResult> TransferFunds(TransferRequest transferRequest)
         {
             try
             {
                 await _transactionService.TransferFunds(transferRequest);
-                return new OkObjectResult(new { message = "Transfer Sucessfull.",});
+                return new OkObjectResult(new { message = "Transfer Sucessfull.", });
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+
+        }
+        [HttpGet]
+        [Route("GetAllTransactions/{userId}")]
+        [Authorize(Roles = "account-holder")]
+        public async Task<ActionResult> GetAllTransactions(string userId)
+        {
+
+            var res = await _transactionService.GetAllTransactions(userId);
+            return new OkObjectResult(new { message = "Transactions Loaded.", data = res });
 
         }
     }
