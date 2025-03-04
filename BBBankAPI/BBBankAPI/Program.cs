@@ -167,6 +167,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 app.UseCors(MyAllowSpecificOrigins);
+app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseWhen(
     context => !context.Request.Path.StartsWithSegments("/api/graphUpdates"),
     branch =>

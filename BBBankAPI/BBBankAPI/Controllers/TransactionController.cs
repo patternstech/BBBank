@@ -39,18 +39,10 @@ namespace BBBankAPI.Controllers
         [Route("GetLast12MonthBalances")]
         public async Task<ActionResult> GetLast12MonthBalances()
         {
-            try
-            {
-                logger.LogInformation("Executing GetLast12MonthBalances");
-                var res = await _transactionService.GetLast12MonthBalances(null);
-                logger.LogInformation("Executed GetLast12MonthBalances");
-                return new OkObjectResult(new { message = "Last 12 Month Balances retrieved.", data = res });
 
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var res = await _transactionService.GetLast12MonthBalances(null);
+            logger.LogInformation("Executed GetLast12MonthBalances");
+            return new OkObjectResult(new { message = "Last 12 Month Balances retrieved.", data = res });
         }
         /// <summary>
         /// Retrieves the account balances for the last 12 months for a specific user.
@@ -65,21 +57,13 @@ namespace BBBankAPI.Controllers
         [Authorize(Roles = "account-holder")]
         public async Task<ActionResult> GetLast12MonthBalances(string userId)
         {
-            try
-            {
-                logger.LogInformation("Executing GetLast12MonthBalances");
-                var res = await _transactionService.GetLast12MonthBalances(userId);
-                logger.LogInformation("Executed GetLast12MonthBalances");
-                telemetryClient.TrackEvent(BBBankConstants.BalanceInquiryEvent, new Dictionary<string, string>()
+
+            var res = await _transactionService.GetLast12MonthBalances(userId);
+            telemetryClient.TrackEvent(BBBankConstants.BalanceInquiryEvent, new Dictionary<string, string>()
                 { {"Total Balance" , res.TotalBalance.ToString() },
                   {"UserId", userId } });
-                return new OkObjectResult(new { message = "Last 12 Month Balances retrieved.", data = res });
-            }
-            catch (Exception ex)
-            {
-                telemetryClient.TrackException(ex);
-                return BadRequest(ex.Message);
-            }
+            return new OkObjectResult(new { message = "Last 12 Month Balances retrieved.", data = res });
+
         }
         /// <summary>
         /// Retrieves the account balances [with average] for the last 12 months for a specific user.
@@ -94,36 +78,23 @@ namespace BBBankAPI.Controllers
         [Route("v2/GetLast12MonthBalances/{userId}")]
         public async Task<ActionResult> GetLast12MonthBalancesV2(string userId)
         {
-            try
-            {
-                logger.LogInformation("Executing GetLast12MonthBalances");
-                var res = await _transactionService.GetLast12MonthBalances(userId);
-                logger.LogInformation("Executed GetLast12MonthBalances");
-                telemetryClient.TrackEvent(BBBankConstants.BalanceInquiryEvent, new Dictionary<string, string>()
+
+            var res = await _transactionService.GetLast12MonthBalances(userId);
+
+            telemetryClient.TrackEvent(BBBankConstants.BalanceInquiryEvent, new Dictionary<string, string>()
                 { {"Total Balance" , res.TotalBalance.ToString() },
                   {"UserId", userId } });
-                return new OkObjectResult(new { message = "Last 12 Month Balances retrieved.", data = res });
-            }
-            catch (Exception ex)
-            {
-                telemetryClient.TrackException(ex);
-                return BadRequest(ex.Message);
-            }
+            return new OkObjectResult(new { message = "Last 12 Month Balances retrieved.", data = res });
         }
         [HttpPost]
         [Route("TransferFunds")]
         [Authorize(Roles = "account-holder")]
         public async Task<ActionResult> TransferFunds(TransferRequest transferRequest)
         {
-            try
-            {
-                await _transactionService.TransferFunds(transferRequest);
-                return new OkObjectResult(new { message = "Transfer Sucessfull.", });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            await _transactionService.TransferFunds(transferRequest);
+            return new OkObjectResult(new { message = "Transfer Sucessfull.", });
+
 
         }
         [HttpGet]
