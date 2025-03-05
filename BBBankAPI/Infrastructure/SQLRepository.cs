@@ -111,12 +111,23 @@ namespace Infrastructure
             if (updated == null)
                 return null;
 
-            TEntity existing = await DbSet.FindAsync(updated.Id);
+            var existing = await DbSet.FindAsync(updated.Id);
             if (existing != null)
             {
-                _context.Entry(existing).CurrentValues.SetValues(updated);
+                _context.Entry(existing).State = EntityState.Detached;
+                _context.Attach(updated);
+                _context.Entry(updated).State = EntityState.Modified;
+
+                // Ensure navigation properties are also updated
+                foreach (var navigationProperty in _context.Entry(updated).Navigations)
+                {
+                    if (navigationProperty.CurrentValue != null) // Prevent null reference error
+                    {
+                        _context.Entry(navigationProperty.CurrentValue).State = EntityState.Modified;
+                    }
+                }
             }
-            return existing;
+            return updated;
         }
         // functions sets the value for delition
         public void DeleteAsync(TEntity t)

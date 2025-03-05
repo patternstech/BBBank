@@ -22,6 +22,17 @@ export class AccountsService {
   }
   getAllAccountsPaginated(pageIndex: number, pageSize: number): Observable<ApiResponse<AccountsListResponse>> {
     return this.httpClient.get<ApiResponse<AccountsListResponse>>
-    (`${environment.apiBaseUrl}Accounts/GetAllAccountsPaginated?pageIndex=${pageIndex}&pageSize=${pageSize}`);
+      (`${environment.apiBaseUrl}Accounts/GetAllAccountsPaginated?pageIndex=${pageIndex}&pageSize=${pageSize}`);
+  }
+  updateAccount(account: Account): Observable<ApiResponse> {
+    const headers = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    }
+    return this.httpClient.put<ApiResponse>(`${environment.apiBaseUrl}Accounts/UpdateAccount`, JSON.stringify(account), headers);
+  }
+  deleteAccount(accountId: string): Observable<ApiResponse> {
+    return this.httpClient.delete<ApiResponse>(`${environment.apiBaseUrl}Accounts/DeleteAccount/${accountId}`);
   }
 }

@@ -107,5 +107,15 @@ namespace BBBankAPI.Controllers
             return new OkObjectResult(new { message = "Transactions Loaded.", data = res });
 
         }
+        [HttpGet]
+        [Route("GetAllTransactions")]
+        [Authorize(Roles = "bank-manager")]
+        public async Task<ActionResult> GetAllTransactions()
+        {
+
+            var res = await _transactionService.GetAllTransactions(null);
+            return new OkObjectResult(new { message = "Transactions Loaded.", data = res });
+
+        }
     }
 }

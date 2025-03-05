@@ -47,7 +47,7 @@
                           <div class="input-group-text">$</div>
                         </div>
                         <input type="number"  [(ngModel)]="account.currentBalance"  class="form-control" id="currentBalance" placeholder="Current Balance"
-                          name="currentBalance"    onKeyPress="if(this.value.length==10) return false;" />
+                          name="currentBalance"    onKeyPress="if(this.value.length==10) return false;"  disabled="isEditMode"/>
                       </div>
                     </div>
                   </div>
@@ -120,12 +120,17 @@
       <div class="row">
         <div>
           <div class="row">
-            <div class="col-6 mb-3">
+            <div class="col-4">
               <button class="btn btn-cancel btn-block" type="button">Cancel</button>
             </div>
-            <div class="col-6">
-              <button [disabled]="!accountForm.form.valid" class="btn btn-danger btn-create btn-block" type="submit">
-                Create
+            <div class="col-4">
+              <button (click)="Delete()" *ngIf="isEditMode" [disabled]="!accountForm.form.valid" class="btn btn-warning btn-create btn-block">
+                Delete
+              </button>
+            </div>
+            <div class="col-4">
+              <button [textContent]="isEditMode ? 'Update' : 'Create'" [disabled]="!accountForm.form.valid" class="btn btn-danger btn-create btn-block" type="submit">
+                
               </button>
             </div>
           </div>

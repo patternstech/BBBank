@@ -12,6 +12,7 @@ import { ApiResponse } from '../../models/api-response';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manage-accounts',
@@ -42,7 +43,7 @@ export class ManageAccountsComponent implements OnInit {
   resultCount: number;
   pageSize = environment.gridDefaultPageSize;
 
-  constructor(private accountService: AccountsService) { }
+  constructor(private accountService: AccountsService, private router: Router) { }
   ngOnInit() {
     this.paginator.page
     .pipe(        
@@ -81,6 +82,8 @@ export class ManageAccountsComponent implements OnInit {
     );
     this.dataSource = new MatTableDataSource(filteredData);
   }
-
+  Update(account: Account) {
+    this.router.navigate(['bank-manager/create-account'], { state: { data: account } });
+  }
 
 }

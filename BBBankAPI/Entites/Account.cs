@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -18,7 +19,8 @@ namespace Entites
         [ForeignKey("UserId")]
         public string UserId { get; set; }
         public virtual User User { get; set; }
-        public virtual ICollection<Transaction> Transactions { get; set; }
+
+        public virtual ICollection<Transaction>? Transactions { get; set; }
     }
     public enum AccountStatus
     {

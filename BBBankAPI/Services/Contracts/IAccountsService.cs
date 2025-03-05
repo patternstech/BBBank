@@ -16,5 +16,7 @@ namespace Services.Contracts
         Task<AccountInfoByAccountNumberResponse> GetAccountInfoByAccountNumber(string accountNumber);
         Task DepositFunds(DepositRequest depositRequest);
         Task<AccountsListResponse> GetAllAccountsPaginated(int pageIndex, int pageSize);
+        Task UpdateAccount(Account account);
+        Task Delete(string accountId);
     }
 }

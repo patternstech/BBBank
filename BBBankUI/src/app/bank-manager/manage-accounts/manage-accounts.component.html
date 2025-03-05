@@ -59,7 +59,7 @@
                 <ng-container matColumnDef="button">
                     <th mat-header-cell *matHeaderCellDef></th>
                     <td mat-cell *matCellDef="let row">
-                        <button class="btn btn-primary">Manage</button>
+                        <button class="btn btn-primary" (click)="Update(row)">Manage</button>
                     </td>
                 </ng-container>
 

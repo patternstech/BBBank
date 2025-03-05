@@ -114,5 +114,26 @@ namespace BBBankAPI.Controllers
          
         }
 
+        [Authorize(Roles = "bank-manager")]
+        [HttpDelete]
+        [Route("DeleteAccount/{accountId}")]
+        public async Task<ActionResult> DeleteAccount(string accountId)
+        {
+            await _accountsService.Delete(accountId);
+
+            return new OkObjectResult(new { message = $"{accountId}$ Deleted" });
+
+        }
+        [Authorize(Roles = "bank-manager")]
+        [HttpPut]
+        [Route("UpdateAccount")]
+        public async Task<ActionResult> UpdateAccount(Account account)
+        {
+            await _accountsService.UpdateAccount(account);
+
+            return new OkObjectResult(new { message = $"{account.AccountTitle}$ Updated" });
+
+        }
+
     }
 }

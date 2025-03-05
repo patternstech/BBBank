@@ -109,5 +109,18 @@ namespace Services
             await this._unitOfWork.AccountRepository.AddAsync(account);
             await this._unitOfWork.CommitAsync();
         }
+
+        public async Task UpdateAccount(Account account)
+        {
+            await _unitOfWork.AccountRepository.UpdateAsync(account);
+            await this._unitOfWork.CommitAsync();
+        }
+
+        public async Task Delete(string accountId)
+        {
+            var account = await _unitOfWork.AccountRepository.GetAsync(accountId);
+            _unitOfWork.AccountRepository.DeleteAsync(account);
+            await this._unitOfWork.CommitAsync();
+        }
     }
 }

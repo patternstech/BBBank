@@ -6,4 +6,5 @@ export class Account {
     currentBalance: number;
     accountStatus: number;
     accountNumber: string;
+    id: string;
 }

@@ -6,6 +6,7 @@ import { EntraIdService } from '../services/entra-id.service';
 import { User } from '../../models/user';
 import { CommonModule } from '@angular/common';
 import { AccountsService } from '../services/accounts.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-account',
@@ -14,26 +15,66 @@ import { AccountsService } from '../services/accounts.service';
   styleUrl: './create-account.component.css'
 })
 export class CreateAccountComponent {
+  isEditMode: boolean = false;
   account: Account;
   azureAdUsers: EntraIdUser[];
   selectedAdUser: EntraIdUser = null;
-  constructor(private entraIdService: EntraIdService, private accountsService: AccountsService) {
-    this.initializeEmptyForm();
+  constructor(private entraIdService: EntraIdService, private accountsService: AccountsService, private router: Router) {
+    const navigation = this.router.getCurrentNavigation();
+    this.account = navigation?.extras.state?.['data'] || null;
+    this.isEditMode = !!this.account;
+    if (!this.isEditMode) {
+      this.initializeEmptyForm();
+    }
+
+
   }
   onSubmit(form: any) {
-    this.accountsService
-      .openAccount(this.account)
-      .subscribe({
-        next: (data: any) => {
+    if (this.isEditMode) {
+      this.accountsService
+        .updateAccount(this.account)
+        .subscribe({
+          next: (data: any) => {
 
-        },
-        error: (error: any) => {
-          console.log(error);
-        },
-        complete: () => {
-          this.initializeEmptyForm();
-        }
-      });
+          },
+          error: (error: any) => {
+            console.log(error);
+          },
+          complete: () => {
+            this.initializeEmptyForm();
+          }
+        });
+    }
+    else {
+      this.accountsService
+        .openAccount(this.account)
+        .subscribe({
+          next: (data: any) => {
+
+          },
+          error: (error: any) => {
+            console.log(error);
+          },
+          complete: () => {
+            this.initializeEmptyForm();
+          }
+        });
+    }
+  }
+  Delete(){
+    this.accountsService
+    .deleteAccount(this.account.id)
+    .subscribe({
+      next: (data: any) => {
+
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+      complete: () => {
+        this.initializeEmptyForm();
+      }
+    });
   }
   onAdUserSelect($event: any) {
     this.account.user.id = this.selectedAdUser.id;
@@ -56,4 +97,5 @@ export class CreateAccountComponent {
         },
       });
   }
+
 }
