@@ -6,5 +6,8 @@ export const environment = {
     postLogoutRedirectUri: 'http://localhost:4200/login', //Url where Azure AD will come back after Signing Out Process completes. 
     defaultScope: 'api://secure-bbbankapi/DefaultScope',
     entraIdUsersUrl: 'https://bbbank-entra-users-list.azurewebsites.net:443/api/GetEntraUsers/triggers/When_a_HTTP_request_is_received/invoke?api-version=2022-05-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=QT2Zwg074BblLJM0VxhJw_QOkGcnp4JowpgVqEzXM4c',
-    gridDefaultPageSize: 10
+    gridDefaultPageSize: 10,
+    profilePicUploadEndpoint: 'https://bbbankfunctions.azurewebsites.net/api/UploadImageToBlob?code=5oLCbAtZXUVCIrAada3x55Aox0qgAq9nyRhpmlkKSlIiAzFuhF91DA==&fileName=',
+    azureStorageAccountName: 'bbbankstorage',
+    azureStorageContainerName: 'profile-pics'
 };

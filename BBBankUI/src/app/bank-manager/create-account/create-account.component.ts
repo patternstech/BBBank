@@ -7,6 +7,8 @@ import { User } from '../../models/user';
 import { CommonModule } from '@angular/common';
 import { AccountsService } from '../services/accounts.service';
 import { Router } from '@angular/router';
+import { AzureAccessService } from '../services/azure-service.service';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-create-account',
@@ -19,7 +21,7 @@ export class CreateAccountComponent {
   account: Account;
   azureAdUsers: EntraIdUser[];
   selectedAdUser: EntraIdUser = null;
-  constructor(private entraIdService: EntraIdService, private accountsService: AccountsService, private router: Router) {
+  constructor(private entraIdService: EntraIdService, private accountsService: AccountsService, private router: Router, private azureAccessService: AzureAccessService) {
     const navigation = this.router.getCurrentNavigation();
     this.account = navigation?.extras.state?.['data'] || null;
     this.isEditMode = !!this.account;
@@ -97,5 +99,23 @@ export class CreateAccountComponent {
         },
       });
   }
+  save(files: FileList | null) {
+    if (!files || files.length === 0) {
+      console.error("No file selected.");
+      return;
+    }
+    const file = files[0]; // Get the first file
+    const formData = new FormData();
+    formData.append("file", file); // Use "file" as the key
 
+    this.azureAccessService.uploadImageToBlob(formData, file.name).subscribe({
+      next: (data) => {      
+        this.account.user.profilePicUrl = `https://${environment.azureStorageAccountName}.blob.core.windows.net/${environment.azureStorageContainerName}/${file.name}`;
+      },
+      error: (error) => {
+        console.error("Upload failed:", error);
+      },
+    });
+
+  } 
 }
