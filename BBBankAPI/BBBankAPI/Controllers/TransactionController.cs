@@ -88,7 +88,7 @@ namespace BBBankAPI.Controllers
         }
         [HttpPost]
         [Route("TransferFunds")]
-        [Authorize(Roles = "account-holder")]
+      //  [Authorize(Roles = "account-holder")]
         public async Task<ActionResult> TransferFunds(TransferRequest transferRequest)
         {
 

@@ -41,4 +41,10 @@
 		<Folder Include="Logs\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Content Update="rules.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
 </Project>

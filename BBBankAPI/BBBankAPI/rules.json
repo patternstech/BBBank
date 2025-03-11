@@ -1,0 +1,26 @@
+[
+  {
+    "WorkflowName": "TransferRules",
+    "Rules": [
+      {
+        "RuleName": "ReceiverAccountMustBeActive",
+        "Expression": "receiverAccountStatus == 0",
+        "ErrorMessage": "The receiver account must be active."
+      },
+      {
+        "RuleName": "SenderMustHaveSufficientBalance",
+        "Expression": "senderBalance >= transferAmount",
+        "ErrorMessage": "Insufficient balance in sender's account."
+      },
+      {
+        "RuleName": "500DollarLimit",
+        "Expression": "transferAmount < 500",
+        "ErrorMessage": "Transfer Amount cannot be greater than 500."
+      }
+    ]
+  }
+  
+  //{
+  //  "WorkflowName": "DepositRules",
+  //  "Rules": [
+  ]

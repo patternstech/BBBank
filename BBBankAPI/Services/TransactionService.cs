@@ -24,14 +24,16 @@ namespace Services
         private readonly IHubContext<UpdateHub> _hubContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IRulesEngineService _rulesEngineService;
         public Settings _settings { get; }
 
-        public TransactionService(IHubContext<UpdateHub> hubContext, IUnitOfWork unitOfWork, IOptionsSnapshot<Settings> options, IHttpContextAccessor httpContextAccessor)
+        public TransactionService(IHubContext<UpdateHub> hubContext, IUnitOfWork unitOfWork, IOptionsSnapshot<Settings> options, IHttpContextAccessor httpContextAccessor, IRulesEngineService rulesEngineService)
         {
             _hubContext = hubContext;
             _unitOfWork = unitOfWork;
             _settings = options.Value;
             _httpContextAccessor = httpContextAccessor;
+            _rulesEngineService = rulesEngineService;
         }
         public async Task<LineGraphData> GetLast12MonthBalances(string userId)
         {
@@ -73,6 +75,8 @@ namespace Services
         public async Task TransferFunds(TransferRequest transferRequest)
         {
             var accountFrom = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountNumber == transferRequest.SenderAccountNumber, "Transactions");
+            var accountTo = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountNumber == transferRequest.ReceiverAccountNumber, "Transactions");
+            await _rulesEngineService.ValidateTransferRules(accountFrom.CurrentBalance, transferRequest.TransferAmount, (int)accountTo.AccountStatus);
             var transactionFrom = new Transaction()
             {
                 Id = Guid.NewGuid().ToString(),
@@ -82,7 +86,6 @@ namespace Services
             };
             accountFrom.Transactions.Add(transactionFrom);
 
-            var accountTo = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountNumber == transferRequest.ReceiverAccountNumber, "Transactions");
             var transactionTo = new Transaction()
             {
                 Id = Guid.NewGuid().ToString(),

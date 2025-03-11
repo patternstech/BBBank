@@ -127,6 +127,7 @@ builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(SQLRepository<>));
 builder.Services.AddScoped<DbContext, BBBankContext>();
+builder.Services.AddScoped<IRulesEngineService, RulesEngineService>();
 //builder.Services.Configure<ApiBehaviorOptions>(options =>
 //{
 //    options.SuppressModelStateInvalidFilter = true;
