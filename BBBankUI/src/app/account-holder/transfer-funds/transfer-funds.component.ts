@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AccountByUserInfo, AccountInfo } from '../../models/account-by-userInfo';
+import { AccountInfo } from '../../models/account-by-userInfo';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { catchError, debounceTime, distinctUntilChanged, fromEvent, map, Observable, of, switchMap } from 'rxjs';
 import { TransferRequest } from '../../models/transfer-request';
@@ -15,7 +15,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './transfer-funds.component.html',
   styleUrl: './transfer-funds.component.css',
 })
-export class TransferFundsComponent {
+export class TransferFundsComponent implements OnInit {
   transferRequest: TransferRequest = {
     transferAmount: null,
     senderAccountNumber: '',
@@ -42,7 +42,7 @@ export class TransferFundsComponent {
           return of(null);
         }
         return this.accountsService.getAccountByAccountNumber(accountNumber).pipe(
-          catchError((error) => {
+          catchError(() => {
             this.receiverAccountInfo = null;
             return of(null); 
           })
@@ -56,12 +56,10 @@ export class TransferFundsComponent {
          this.receiverAccountInfo = res.result?.data;
         }
       },
-      error: (error) => {
+      error: () => {
         this.receiverAccountInfo = null;
       },
     });
-  }
-  initialize() {
   }
   transfer() {
 
@@ -74,7 +72,7 @@ export class TransferFundsComponent {
         this.toastrService.success(data.result.message, 'BBBank');
       },
       error: (errorResponse) => {
-        this.toastrService.error('Error During Transfer.');
+        this.toastrService.error(errorResponse.message);
       },
     });
   }

@@ -1,4 +1,4 @@
-<form class="example-container" (ngSubmit)="onSubmit(accountForm)" #accountForm="ngForm" novalidate
+<form class="example-container" (ngSubmit)="onSubmit()" #accountForm="ngForm" novalidate
 >
   <div class="row">
     <div class="col-12">
@@ -20,7 +20,7 @@
             <div class="col-sm-12 ml-auto mr-auto">
               <div class="amount-cont">
                 <div class="form-row row">
-                  <select class="form-control" name="user" id="user" [(ngModel)]="selectedAdUser" (change)="onAdUserSelect($event)">
+                  <select class="form-control" name="user" id="user" [(ngModel)]="selectedAdUser" (change)="onAdUserSelect()">
                     <option [ngValue]="null" selected disabled>Select Azure AD User</option>
                     <option *ngFor="let adUser of azureAdUsers" [ngValue]="adUser">
                       {{adUser?.displayName}}

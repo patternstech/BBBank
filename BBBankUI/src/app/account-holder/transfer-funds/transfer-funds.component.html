@@ -74,18 +74,18 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="error-message" *ngIf="receiverAccountInfo == null">
+        <div class="error-message" *ngIf="receiverAccountInfo === null">
             <p class="text-warning" >
                 Account to be deposited is not loaded.
             </p>
         </div>
         <div class="row">
             <div class="col-sm-6 mb-3">
-                <button class="btn btn-cancel btn-block" (click)="initialize()"
+                <button class="btn btn-cancel btn-block" 
                     style="width: 30%;margin-left: 70%;">Cancel</button>
             </div>
             <div class="col-sm-6 mb-3">
-                <button class="btn btn-danger btn-block" (click)="transfer()" style="width: 30%"  [disabled]="receiverAccountInfo == null">Transfer</button>
+                <button class="btn btn-danger btn-block" (click)="transfer()" style="width: 30%"  [disabled]="receiverAccountInfo === null">Transfer</button>
             </div>
         </div>
 

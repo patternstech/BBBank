@@ -1,7 +1,6 @@
-import { BrowserCacheLocation, Configuration, InteractionType, IPublicClientApplication, LogLevel, PublicClientApplication } from "@azure/msal-browser";
+import { BrowserCacheLocation, Configuration, InteractionType, LogLevel, PublicClientApplication } from "@azure/msal-browser";
 import { environment } from "../environments/environment.development";
 import { MsalGuardConfiguration, MsalInterceptorConfiguration } from "@azure/msal-angular";
-import { isPlatformBrowser } from "@angular/common";
 
 export const msalConfig: Configuration = {
     auth: {
@@ -39,7 +38,7 @@ export const protectedResources = {
 export const loginRequest = {
     // This scope is exposed by API App and added as permission by Client app (this app) in the Azure AD Portal. 
     // When client app (this App) will try to login with this scope, it will receive App Roles information as well in the token since App roles are also configured in API App
-    scopes: [environment.defaultScope] as any[],
+    scopes: [environment.defaultScope] as string[],
 };
 
 export function MSALInstanceFactory(): PublicClientApplication {
@@ -56,7 +55,7 @@ export function MSALInstanceFactory(): PublicClientApplication {
 // This Interceptor setting will add access token to all http calls that are mentioned in  protectedResourceMap. 
 // Since we are mentioning baseUrl, So all the http calls starting with baseUrl will have access_token injected in the header that will have role and scope info in it
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
-    const protectedResourceMap = new Map<string, Array<string>>();
+    const protectedResourceMap = new Map<string, string[]>();
    // protectedResourceMap.set('https://graph.microsoft.com/v1.0/me', ['User.Read', 'User.ReadBasic.All']);
     protectedResourceMap.set(protectedResources.bbbankApi.endpoint, protectedResources.bbbankApi.scopes);
 

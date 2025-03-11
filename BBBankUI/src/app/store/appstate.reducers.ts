@@ -17,7 +17,7 @@ export const authReducer = createReducer(
             loggedInUser: action.loggedInUser,
         };
     }),
-    on(logoutAction, (state, action) => {
+    on(logoutAction, () => {
         return {
             loggedInUser: undefined as AppUser | undefined,
         };

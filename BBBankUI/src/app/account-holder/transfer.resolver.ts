@@ -7,9 +7,9 @@ import { AccountsService } from './services/accounts.service';
 import { AccountByUserInfo } from '../models/account-by-userInfo';
 import { ApiResponse } from '../models/api-response';
 import { ToastrService } from 'ngx-toastr';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs';
 
-export const transferResolver: ResolveFn<AccountByUserInfo | undefined> = (route, state) => {
+export const transferResolver: ResolveFn<AccountByUserInfo | undefined> = () => {
   const accountsService = inject(AccountsService);
   const store = inject(Store<AppState>);
   const toastrService = inject(ToastrService);
@@ -24,7 +24,7 @@ export const transferResolver: ResolveFn<AccountByUserInfo | undefined> = (route
             return null;
           }
         }),
-        catchError((error) => {
+        catchError(() => {
           toastrService.error('Error fetching logged-in user account info.');
           throw new Error('Failed to fetch data. Navigation canceled.');
         })

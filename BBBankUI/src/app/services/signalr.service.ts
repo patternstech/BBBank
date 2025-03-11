@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from '../store/appstate.reducers';
 import { loggedInUserSelector } from '../store/auth.selectors';
-import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import {  HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { environment } from '../../environments/environment.development';
 import { ToastrService } from 'ngx-toastr';
 import { SharedState } from '../shared/store/shared.reducers';

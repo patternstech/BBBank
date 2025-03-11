@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { LineGraphData } from "../../models/line-graph-data";
-import { allTransactionLoadedAction, last12MonthsBalancesLoadedAction, loadAllTransactionsAction, loadLast12MonthsBalancesAction } from "./dashboard.actions";
+import { allTransactionLoadedAction, last12MonthsBalancesLoadedAction } from "./dashboard.actions";
 import { Transaction } from "../../models/transaction";
 
 export const sharedFeatureKey = 'shared';

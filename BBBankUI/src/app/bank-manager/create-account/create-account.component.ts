@@ -17,7 +17,7 @@ import { environment } from '../../../environments/environment.development';
   styleUrl: './create-account.component.css'
 })
 export class CreateAccountComponent {
-  isEditMode: boolean = false;
+  isEditMode = false;
   account: Account;
   azureAdUsers: EntraIdUser[];
   selectedAdUser: EntraIdUser = null;
@@ -31,15 +31,15 @@ export class CreateAccountComponent {
 
 
   }
-  onSubmit(form: any) {
+  onSubmit() {
     if (this.isEditMode) {
       this.accountsService
         .updateAccount(this.account)
         .subscribe({
-          next: (data: any) => {
-
+          next: () => {
+            console.log('success');
           },
-          error: (error: any) => {
+          error: (error) => {
             console.log(error);
           },
           complete: () => {
@@ -51,10 +51,10 @@ export class CreateAccountComponent {
       this.accountsService
         .openAccount(this.account)
         .subscribe({
-          next: (data: any) => {
-
+          next: () => {
+            console.log('success');
           },
-          error: (error: any) => {
+          error: (error) => {
             console.log(error);
           },
           complete: () => {
@@ -67,10 +67,10 @@ export class CreateAccountComponent {
     this.accountsService
     .deleteAccount(this.account.id)
     .subscribe({
-      next: (data: any) => {
-
+      next: () => {
+        console.log('success');
       },
-      error: (error: any) => {
+      error: (error) => {
         console.log(error);
       },
       complete: () => {
@@ -78,7 +78,7 @@ export class CreateAccountComponent {
       }
     });
   }
-  onAdUserSelect($event: any) {
+  onAdUserSelect() {
     this.account.user.id = this.selectedAdUser.id;
     this.account.user.firstName = this.selectedAdUser.givenName;
     this.account.user.lastName = this.selectedAdUser.surname;
@@ -91,6 +91,7 @@ export class CreateAccountComponent {
 
     this.entraIdService.getAzureAdUsersList()
       .subscribe({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         next: (data: any) => {
           this.azureAdUsers = data['value'];
         },
@@ -109,7 +110,7 @@ export class CreateAccountComponent {
     formData.append("file", file); // Use "file" as the key
 
     this.azureAccessService.uploadImageToBlob(formData, file.name).subscribe({
-      next: (data) => {      
+      next: () => {      
         this.account.user.profilePicUrl = `https://${environment.azureStorageAccountName}.blob.core.windows.net/${environment.azureStorageContainerName}/${file.name}`;
       },
       error: (error) => {

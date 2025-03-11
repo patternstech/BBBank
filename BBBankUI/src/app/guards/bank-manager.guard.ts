@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 
-export const bankManagerGuard: CanActivateFn = (route, state) => {
+export const bankManagerGuard: CanActivateFn = () => {
   const router = inject(Router);
   if (typeof localStorage !== 'undefined' ) {
     const loggedInUserRole = JSON.parse(localStorage.getItem('loggedInUser') || '{}').roles[0];

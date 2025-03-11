@@ -1,13 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../services/auth.service';
-import { userInfo } from 'os';
+import { Component } from '@angular/core';
+
 import { Router } from '@angular/router';
-import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
-import { AuthenticationResult, EventMessage, EventType } from '@azure/msal-browser';
-import { filter, Subject, takeUntil } from 'rxjs';
-import { AppUser } from '../models/app-user';
-import { jwtDecode } from "jwt-decode";
-import { loginRequest } from '../auth-config';
 
 @Component({
   selector: 'app-login',

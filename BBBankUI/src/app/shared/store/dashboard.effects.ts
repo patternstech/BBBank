@@ -19,7 +19,7 @@ export class DashBoardEffects {
                         map((response) =>
                             last12MonthsBalancesLoadedAction({ lineGraphData: response.result.data })
                         ),
-                        catchError((err) => {
+                        catchError(() => {
                             return of(last12MonthsBalancesLoadErrorAction());
                         })
                     )
@@ -36,7 +36,7 @@ export class DashBoardEffects {
                         map((response) =>
                             allTransactionLoadedAction({ transactions: response.result.data })
                         ),
-                        catchError((err) => {
+                        catchError(() => {
                             return of(loadAllTransactionsErrorAction());
                         })
                     )

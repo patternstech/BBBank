@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AppState } from '../../store/appstate.reducers';
@@ -12,7 +12,7 @@ import { isLoggedInUserAccountHolderSelector, isLoggedInUserManagerSelector } fr
   templateUrl: './side-nav.component.html',
   styleUrl: './side-nav.component.css'
 })
-export class SideNavComponent {
+export class SideNavComponent implements OnInit {
   constructor(private store: Store<AppState>) { }
   isLoggedInUserManager$: Observable<boolean>;
   isLoggedInUserAccountHolder$: Observable<boolean>;
