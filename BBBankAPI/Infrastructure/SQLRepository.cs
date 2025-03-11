@@ -1,6 +1,7 @@
 ﻿using Entites;
 using Infrastructure.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +14,18 @@ namespace Infrastructure
     //SQL Implementation of IRepository where TEntity is anything that drives with BaseEntity so basically all of our base entities.
     public class SQLRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
+        private readonly ILogger<SQLRepository<TEntity>> _logger;
         protected DbContext _context;
         protected DbSet<TEntity> DbSet;
 
         //DbContext is set to resokve with instance of BBBankContext in DI
-        public SQLRepository(DbContext context)
+        public SQLRepository(DbContext context, ILogger<SQLRepository<TEntity>> logger)
         {
             //so _context goign to have BBBankContext because of DI
             _context = context;
             //DBSet set to incoming Generic Type
             DbSet = _context.Set<TEntity>();
+            _logger = logger;
         }
         // function returns colection of base objects by filtering on navigation properties.
         // where navigation properties are passed as expression
@@ -86,6 +89,20 @@ namespace Infrastructure
                     t.Id = Guid.NewGuid().ToString();
                 }
                 var xx = await DbSet.AddAsync(t);
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                foreach (var entry in ex.Entries)
+                {
+                    string entityName = entry.Entity.GetType().Name; 
+                    _logger.LogError(ex, "Concurrency Exception on entity {EntityName}", entityName);
+                }
+                throw;
+            }
+            catch (ArgumentNullException ex)
+            {
+                // Handle null entity
+                throw;
             }
             catch (Exception ex)
             {

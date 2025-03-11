@@ -50,7 +50,7 @@ namespace Services
             }
             if (allTransactions.Any())
             {
-                var apiVersion = GetRequestedApiVersion();
+                var apiVersion = _httpContextAccessor.HttpContext.GetRequestedApiVersion();
                 var totalBalance = allTransactions.Sum(x => x.TransactionAmount);
                 lineGraphData.TotalBalance = totalBalance;
                 decimal lastMonthTotal = 0;
@@ -76,38 +76,49 @@ namespace Services
         {
             var accountFrom = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountNumber == transferRequest.SenderAccountNumber, "Transactions");
             var accountTo = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountNumber == transferRequest.ReceiverAccountNumber, "Transactions");
-            await _rulesEngineService.ValidateTransferRules(accountFrom.CurrentBalance, transferRequest.TransferAmount, (int)accountTo.AccountStatus);
-            var transactionFrom = new Transaction()
+            if (accountFrom != null && accountTo != null)
             {
-                Id = Guid.NewGuid().ToString(),
-                TransactionAmount = -(transferRequest.TransferAmount),
-                TransactionDate = DateTime.UtcNow,
-                TransactionType = TransactionType.Withdraw
-            };
-            accountFrom.Transactions.Add(transactionFrom);
+                await _rulesEngineService.ValidateTransferRules(accountFrom.CurrentBalance, transferRequest.TransferAmount, (int)accountTo.AccountStatus);
+                var transactionFrom = new Transaction()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    TransactionAmount = -(transferRequest.TransferAmount),
+                    TransactionDate = DateTime.UtcNow,
+                    TransactionType = TransactionType.Withdraw
+                };
+                accountFrom.Transactions.Add(transactionFrom);
 
-            var transactionTo = new Transaction()
+                var transactionTo = new Transaction()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    TransactionAmount = transferRequest.TransferAmount,
+                    TransactionDate = DateTime.UtcNow,
+                    TransactionType = TransactionType.Deposit
+                };
+                accountTo.Transactions.Add(transactionTo);
+
+                await _unitOfWork.CommitAsync();
+
+                string userId = _httpContextAccessor.HttpContext.GetUserId();
+
+                await _hubContext.Clients.User(userId).SendAsync("updateGraphsData");
+            }
+        }
+        public async Task DepositFunds(DepositRequest depositRequest)
+        {
+            var account = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountNumber == depositRequest.AccountNumber, "Transactions");
+            var transaction = new Transaction()
             {
                 Id = Guid.NewGuid().ToString(),
-                TransactionAmount = transferRequest.TransferAmount,
+                TransactionAmount = depositRequest.Amount,
                 TransactionDate = DateTime.UtcNow,
                 TransactionType = TransactionType.Deposit
             };
-            accountTo.Transactions.Add(transactionTo);
-
+            account.Transactions.Add(transaction);
             await _unitOfWork.CommitAsync();
-
-            string userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            string userId = _httpContextAccessor.HttpContext.GetUserId();
 
             await _hubContext.Clients.User(userId).SendAsync("updateGraphsData");
-        }
-        private string GetRequestedApiVersion()
-        {
-            var path = _httpContextAccessor.HttpContext?.Request.Path.Value;
-
-            return path?.Split('/')
-                        .FirstOrDefault(segment => segment.StartsWith("v", StringComparison.OrdinalIgnoreCase))
-                        ?? "v1";
         }
 
         public async Task<List<Transaction>> GetAllTransactions(string userId)

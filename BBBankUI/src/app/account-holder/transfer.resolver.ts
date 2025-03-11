@@ -4,7 +4,7 @@ import { AppState } from '../store/appstate.reducers';
 import { inject } from '@angular/core';
 import { loggedInUserIdSelector } from '../store/auth.selectors';
 import { AccountsService } from './services/accounts.service';
-import { AccountByUserInfo } from '../models/account-by-userInfo';
+import { AccountByUserInfo } from './models/account-by-userInfo';
 import { ApiResponse } from '../models/api-response';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, map, switchMap } from 'rxjs';

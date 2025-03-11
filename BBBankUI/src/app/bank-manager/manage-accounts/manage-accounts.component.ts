@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Account } from '../../models/account';
 import { environment } from '../../../environments/environment.development';
 import { AccountsService } from '../services/accounts.service';
-import { AccountsListResponse } from '../../models/accounts-list-response';
+import { AccountsListResponse } from '../models/accounts-list-response';
 import { ApiResponse } from '../../models/api-response';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';

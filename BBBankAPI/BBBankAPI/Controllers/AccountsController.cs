@@ -63,6 +63,17 @@ namespace BBBankAPI.Controllers
             return new OkObjectResult(new { message = "Account By User Returned", data = account });
 
         }
+        /// <summary>
+        /// Retrieves account information based on the provided account number.
+        /// </summary>
+        /// <param name="accountNumber">The unique identifier of the account.</param>
+        /// <returns>
+        /// Returns an HTTP 200 OK response with account details if found.
+        /// Returns an HTTP 400 Bad Request if no account is found.
+        /// </returns>
+        /// <remarks>
+        /// This endpoint is restricted to users with the "account-holder" role.
+        /// </remarks>
         [Authorize(Roles = "account-holder")]
         [HttpGet]
         [Route("GetAccountInfoByAccountNumber/{accountNumber}")]
@@ -73,24 +84,6 @@ namespace BBBankAPI.Controllers
             if (account == null)
                 return new BadRequestObjectResult($"no Account exists with accountNumber {accountNumber}");
             return new OkObjectResult(new { message = "Account By Account Number Returned", data = account });
-
-        }
-        /// <summary>
-        /// Deposits funds into an account.
-        /// </summary>
-        /// <param name="depositRequest">The DepositRequest object containing the deposit details.</param>
-        /// <returns>An ActionResult indicating the success of the deposit.</returns>
-        /// <remarks>
-        /// This endpoint is restricted to users with the "account-holder" role and processes deposit requests.
-        /// </remarks>
-        [Authorize(Roles = "account-holder")]
-        [HttpPost]
-        [Route("Deposit")]
-        public async Task<ActionResult> Deposit(DepositRequest depositRequest)
-        {
-            await _accountsService.DepositFunds(depositRequest);
-
-            return new OkObjectResult(new { message = $"{depositRequest.Amount}$ Deposited" });
 
         }
         /// <summary>
@@ -113,7 +106,16 @@ namespace BBBankAPI.Controllers
 
          
         }
-
+        /// <summary>
+        /// Deletes an account based on the provided account ID.
+        /// </summary>
+        /// <param name="accountId">The unique identifier of the account to be deleted.</param>
+        /// <returns>
+        /// Returns an HTTP 200 OK response with a confirmation message upon successful deletion.
+        /// </returns>
+        /// <remarks>
+        /// This endpoint is restricted to users with the "bank-manager" role.
+        /// </remarks>
         [Authorize(Roles = "bank-manager")]
         [HttpDelete]
         [Route("DeleteAccount/{accountId}")]
@@ -124,6 +126,16 @@ namespace BBBankAPI.Controllers
             return new OkObjectResult(new { message = $"{accountId}$ Deleted" });
 
         }
+        /// <summary>
+        /// Updates an existing account with new details.
+        /// </summary>
+        /// <param name="account">The account object containing updated information.</param>
+        /// <returns>
+        /// Returns an HTTP 200 OK response with a confirmation message upon successful update.
+        /// </returns>
+        /// <remarks>
+        /// This endpoint is restricted to users with the "bank-manager" role.
+        /// </remarks>
         [Authorize(Roles = "bank-manager")]
         [HttpPut]
         [Route("UpdateAccount")]

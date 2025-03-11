@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AccountByUserInfo } from '../../models/account-by-userInfo';
+import { AccountByUserInfo } from '../models/account-by-userInfo';
 import { AppState } from '../../store/appstate.reducers';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -8,8 +8,9 @@ import { AccountsService } from '../services/accounts.service';
 import { ToastrService } from 'ngx-toastr';
 import { ApiResponse } from '../../models/api-response';
 import { CommonModule, CurrencyPipe } from '@angular/common';
-import { DepositRequest } from '../../models/deposit-request';
+import { DepositRequest } from '../models/deposit-request';
 import { FormsModule } from '@angular/forms';
+import { TransactionService } from '../services/transaction.service';
 
 @Component({
   selector: 'app-deposit-funds',
@@ -23,7 +24,7 @@ export class DepositFundsComponent implements OnInit {
   accountByUserInfo: AccountByUserInfo;
   loggedInUserId: string;
   depositRequest: DepositRequest;
-  constructor(private globalStore: Store<AppState>, private accountsService: AccountsService, private toastrService: ToastrService) {
+  constructor(private globalStore: Store<AppState>, private accountsService: AccountsService, private toastrService: ToastrService, private transactionService: TransactionService) {
     this.depositRequest = new DepositRequest();
    }
   ngOnInit(): void {
@@ -47,7 +48,7 @@ export class DepositFundsComponent implements OnInit {
 
   deposit(){
     this.depositRequest.accountNumber = this.accountByUserInfo.accountNumber;
-    this.accountsService
+    this.transactionService
     .deposit(this.depositRequest)
     .subscribe({
       next: (data) => {

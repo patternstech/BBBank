@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using Services;
 using Services.Contracts;
 using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
@@ -86,17 +87,60 @@ namespace BBBankAPI.Controllers
                   {"UserId", userId } });
             return new OkObjectResult(new { message = "Last 12 Month Balances retrieved.", data = res });
         }
+        /// <summary>
+        /// Transfers funds from one account to another.
+        /// </summary>
+        /// <param name="transferRequest">The request object containing transfer details, including sender account number, recipient account number, and transfer amount.</param>
+        /// <returns>
+        /// Returns an HTTP 200 OK response with a success message upon successful transfer.
+        /// </returns>
+        /// <remarks>
+        /// This endpoint is restricted to users with the "account-holder" role.
+        /// </remarks>
         [HttpPost]
         [Route("TransferFunds")]
-      //  [Authorize(Roles = "account-holder")]
+        [Authorize(Roles = "account-holder")]
         public async Task<ActionResult> TransferFunds(TransferRequest transferRequest)
         {
 
             await _transactionService.TransferFunds(transferRequest);
+            telemetryClient.TrackEvent(BBBankConstants.TransferEvent, new Dictionary<string, string>()
+                { {"From Account" , transferRequest.SenderAccountNumber },
+                  {"Transfer Amount", transferRequest.TransferAmount.ToString() } });
             return new OkObjectResult(new { message = "Transfer Sucessfull.", });
 
 
         }
+        /// <summary>
+        /// Deposits funds into an account.
+        /// </summary>
+        /// <param name="depositRequest">The DepositRequest object containing the deposit details.</param>
+        /// <returns>An ActionResult indicating the success of the deposit.</returns>
+        /// <remarks>
+        /// This endpoint is restricted to users with the "account-holder" role and processes deposit requests.
+        /// </remarks>
+        [Authorize(Roles = "account-holder")]
+        [HttpPost]
+        [Route("Deposit")]
+        public async Task<ActionResult> Deposit(DepositRequest depositRequest)
+        {
+            await _transactionService.DepositFunds(depositRequest);
+            telemetryClient.TrackEvent(BBBankConstants.TransferEvent, new Dictionary<string, string>()
+                { {"Deposit Account Number" , depositRequest.AccountNumber },
+                  });
+            return new OkObjectResult(new { message = $"{depositRequest.Amount}$ Deposited" });
+
+        }
+        /// <summary>
+        /// Retrieves all transactions for a specific user.
+        /// </summary>
+        /// <param name="userId">The unique identifier of the user whose transactions are to be fetched.</param>
+        /// <returns>
+        /// Returns an HTTP 200 OK response with the list of transactions for the specified user.
+        /// </returns>
+        /// <remarks>
+        /// This endpoint is restricted to users with the "account-holder" role.
+        /// </remarks>
         [HttpGet]
         [Route("GetAllTransactions/{userId}")]
         [Authorize(Roles = "account-holder")]
@@ -107,6 +151,15 @@ namespace BBBankAPI.Controllers
             return new OkObjectResult(new { message = "Transactions Loaded.", data = res });
 
         }
+        /// <summary>
+        /// Retrieves all transactions across all users.
+        /// </summary>
+        /// <returns>
+        /// Returns an HTTP 200 OK response with a list of all transactions.
+        /// </returns>
+        /// <remarks>
+        /// This endpoint is restricted to users with the "bank-manager" role.
+        /// </remarks>
         [HttpGet]
         [Route("GetAllTransactions")]
         [Authorize(Roles = "bank-manager")]

@@ -15,5 +15,6 @@ namespace Services.Contracts
         Task<LineGraphData> GetLast12MonthBalances(string userId);
         Task TransferFunds(TransferRequest transferRequest);
         Task<List<Transaction>> GetAllTransactions(string userId);
+        Task DepositFunds(DepositRequest depositRequest);
     }
 }

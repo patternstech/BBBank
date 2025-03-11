@@ -28,24 +28,6 @@ namespace Services
             _hubContext = hubContext;
             _httpContextAccessor = httpContextAccessor;
         }
-
-        public async Task DepositFunds(DepositRequest depositRequest)
-        {
-            var account = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountNumber == depositRequest.AccountNumber, "Transactions");
-            var transaction = new Transaction()
-            {
-                Id = Guid.NewGuid().ToString(),
-                TransactionAmount = depositRequest.Amount,
-                TransactionDate = DateTime.UtcNow,
-                TransactionType = TransactionType.Deposit
-            };
-            account.Transactions.Add(transaction);
-            await _unitOfWork.CommitAsync();
-            string userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-            await _hubContext.Clients.User(userId).SendAsync("updateGraphsData");
-        }
-
         public async Task<AccountInfoByUserResponse> GetAccountInfoByUser(string userId)
         {
             var account = await _unitOfWork.AccountRepository.FindAsync(x => x.UserId == userId, "User");

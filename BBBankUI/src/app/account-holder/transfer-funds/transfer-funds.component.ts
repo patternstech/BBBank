@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AccountInfo } from '../../models/account-by-userInfo';
+import { AccountInfo } from '../models/account-by-userInfo';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { catchError, debounceTime, distinctUntilChanged, fromEvent, map, Observable, of, switchMap } from 'rxjs';
-import { TransferRequest } from '../../models/transfer-request';
+import { TransferRequest } from '../models/transfer-request';
 import { AccountsService } from '../services/accounts.service';
 import { FormsModule } from '@angular/forms';
 import { TransactionService } from '../services/transaction.service';

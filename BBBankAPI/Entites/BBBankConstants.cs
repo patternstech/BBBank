@@ -9,5 +9,7 @@ namespace Entites
     public class BBBankConstants
     {
         public const string BalanceInquiryEvent = "Balance Inquiry";
+        public const string TransferEvent = "Transfer Event";
+        public const string DepositEvent = "Deposit Event";
     }
 }

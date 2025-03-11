@@ -4,7 +4,7 @@ import { Account } from '../../models/account';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { ApiResponse } from '../../models/api-response';
-import { AccountsListResponse } from '../../models/accounts-list-response';
+import { AccountsListResponse } from '../models/accounts-list-response';
 
 @Injectable({
   providedIn: 'root'
