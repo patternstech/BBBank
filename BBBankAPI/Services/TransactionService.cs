@@ -103,6 +103,10 @@ namespace Services
 
                 await _hubContext.Clients.User(userId).SendAsync("updateGraphsData");
             }
+            else
+            {
+                throw new NullReferenceException("Sender or receiver account not found.");
+            }
         }
         public async Task DepositFunds(DepositRequest depositRequest)
         {
