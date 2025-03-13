@@ -25,15 +25,17 @@ namespace Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRulesEngineService _rulesEngineService;
+        private readonly INotificationService _notificationService;
         public Settings _settings { get; }
 
-        public TransactionService(IHubContext<UpdateHub> hubContext, IUnitOfWork unitOfWork, IOptionsSnapshot<Settings> options, IHttpContextAccessor httpContextAccessor, IRulesEngineService rulesEngineService)
+        public TransactionService(IHubContext<UpdateHub> hubContext, IUnitOfWork unitOfWork, IOptionsSnapshot<Settings> options, IHttpContextAccessor httpContextAccessor, IRulesEngineService rulesEngineService, INotificationService notificationService)
         {
             _hubContext = hubContext;
             _unitOfWork = unitOfWork;
             _settings = options.Value;
             _httpContextAccessor = httpContextAccessor;
             _rulesEngineService = rulesEngineService;
+            _notificationService = notificationService;
         }
         public async Task<LineGraphData> GetLast12MonthBalances(string userId)
         {
@@ -121,8 +123,19 @@ namespace Services
             account.Transactions.Add(transaction);
             await _unitOfWork.CommitAsync();
             string userId = _httpContextAccessor.HttpContext.GetUserId();
-
+            await _notificationService.SendEmailNotification(GetEmailNotificationDto(_httpContextAccessor.HttpContext, depositRequest.Amount));
             await _hubContext.Clients.User(userId).SendAsync("updateGraphsData");
+        }
+
+        private EmailNotificationDto GetEmailNotificationDto(HttpContext httpContext, decimal amount)
+        {
+            return new EmailNotificationDto
+            {
+                ToEmail = httpContext.GetUserEmail(),
+                Body = $"{amount}$ deposited in your account.",
+                FromEmail = "DoNotReply@9f221f6a-2200-4c90-9a87-85befc839da4.azurecomm.net",
+                Subject = "Money Deposited"
+            };
         }
 
         public async Task<List<Transaction>> GetAllTransactions(string userId)

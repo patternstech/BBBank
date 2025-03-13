@@ -11,10 +11,12 @@ public static class ServiceExtensions
     public static void RegisterApplicationServices(this IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<ITransactionService, TransactionService>();
+
         services.AddScoped<IAccountsService, AccountsService>();
         services.AddScoped(typeof(IRepository<>), typeof(SQLRepository<>));
         services.AddScoped<DbContext, BBBankContext>();
         services.AddScoped<IRulesEngineService, RulesEngineService>();
+       // services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<ITransactionService, TransactionService>();
     }
 }

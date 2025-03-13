@@ -22,6 +22,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Asp.Versioning;
 using Microsoft.Extensions.DependencyInjection;
+using BBBankAPI.ConfigExtentions;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -32,6 +33,7 @@ builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddCorsPolicy();
 builder.ConfigureAppConfiguration();
 builder.Services.ConfigureAzureServices(builder.Configuration);
+builder.Services.ConfigureServiceBus(builder.Configuration);
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddAzureAppConfiguration();

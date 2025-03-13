@@ -26,5 +26,13 @@ namespace Services
             return httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         }
 
+        public static string? GetUserEmail(this HttpContext httpContext)
+        {
+            if (httpContext?.User?.Claims == null)
+                return null;
+
+            return httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+        }
+
     }
 }

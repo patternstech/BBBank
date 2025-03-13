@@ -27,6 +27,7 @@ namespace Services.Tests
         private TransactionService _transactionService;
         private Mock<IHubClients> _mockClients;
         private Mock<IClientProxy> _mockClientProxy;
+        private Mock<INotificationService> _mockNotificationService;
         [SetUp]
         public void SetUp()
         {
@@ -47,7 +48,8 @@ namespace Services.Tests
     _unitOfWorkMock.Object,
     _settingsMock.Object,
     _httpContextAccessorMock.Object,
-    _rulesEngineServiceMock.Object
+    _rulesEngineServiceMock.Object,
+    _mockNotificationService.Object
 );
 
         }
@@ -162,6 +164,8 @@ namespace Services.Tests
 
             _unitOfWorkMock.Setup(u => u.AccountRepository.FindAsync(It.IsAny<Expression<Func<Account, bool>>>(), "Transactions"))
                 .ReturnsAsync(account);
+        _mockNotificationService.Setup(u => u.SendEmailNotification(It.IsAny<EmailNotificationDto>()))
+    .Returns(Task.CompletedTask);
 
             // Act
             await _transactionService.DepositFunds(depositRequest);
