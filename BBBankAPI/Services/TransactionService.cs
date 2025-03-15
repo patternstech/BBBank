@@ -28,7 +28,12 @@ namespace Services
         private readonly INotificationService _notificationService;
         public Settings _settings { get; }
 
-        public TransactionService(IHubContext<UpdateHub> hubContext, IUnitOfWork unitOfWork, IOptionsSnapshot<Settings> options, IHttpContextAccessor httpContextAccessor, IRulesEngineService rulesEngineService, INotificationService notificationService)
+        public TransactionService(IHubContext<UpdateHub> hubContext,
+            IUnitOfWork unitOfWork,
+            IOptionsSnapshot<Settings> options,
+            IHttpContextAccessor httpContextAccessor,
+            IRulesEngineService rulesEngineService,
+            INotificationService notificationService)
         {
             _hubContext = hubContext;
             _unitOfWork = unitOfWork;
