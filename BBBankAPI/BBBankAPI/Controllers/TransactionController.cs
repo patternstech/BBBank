@@ -2,6 +2,8 @@
 using AutoWrapper.Wrappers;
 using Entites;
 using Entites.RequestModels;
+using LaunchDarkly.Sdk.Server;
+using LaunchDarkly.Sdk.Server.Interfaces;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -27,6 +29,9 @@ namespace BBBankAPI.Controllers
             this.logger = logger;
             this.telemetryClient = telemetryClient;
             _transactionService = transactionService;
+            //string userKey = "user123";
+            //var context = LaunchDarkly.Sdk.Context.Builder(userKey).Build();
+            //var xx = ldClient.BoolVariation("show-average", context, false);
         }
         /// <summary>
         /// Retrieves the account balances for the last 12 months.

@@ -24,10 +24,12 @@ using Asp.Versioning;
 using Microsoft.Extensions.DependencyInjection;
 using BBBankAPI.ConfigExtentions;
 using Microsoft.ApplicationInsights.DependencyCollector;
+using LaunchDarkly.Sdk.Server.Interfaces;
+using LaunchDarkly.Sdk.Server;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
-
+builder.Services.ConfigureLaunchDarkly(builder.Configuration);
 builder.Services.ConfigureSwagger();
 builder.ConfigureLogging();
 builder.Services.AddApplicationInsightsTelemetry();

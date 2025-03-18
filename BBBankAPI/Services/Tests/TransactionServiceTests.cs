@@ -28,6 +28,7 @@ namespace Services.Tests
         private Mock<IHubClients> _mockClients;
         private Mock<IClientProxy> _mockClientProxy;
         private Mock<INotificationService> _mockNotificationService;
+        private Mock<FeatureService> _mockFeatureService;
         [SetUp]
         public void SetUp()
         {
@@ -49,7 +50,8 @@ namespace Services.Tests
     _settingsMock.Object,
     _httpContextAccessorMock.Object,
     _rulesEngineServiceMock.Object,
-    _mockNotificationService.Object
+    _mockNotificationService.Object,
+    _mockFeatureService.Object
 );
 
         }

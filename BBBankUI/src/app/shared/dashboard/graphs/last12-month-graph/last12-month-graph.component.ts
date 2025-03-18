@@ -7,11 +7,13 @@ import { Observable, Subscription } from 'rxjs';
 import { AppState } from '../../../../store/appstate.reducers';
 import { select, Store } from '@ngrx/store';
 import { last12MonthsBalancesSelector } from '../../../store/dashboard.selectors';
+import { CommonModule, CurrencyPipe } from '@angular/common';
+import { FeatureFlagService } from '../../../../services/feature-flag.service';
 Chart.register(LinearScale, CategoryScale);
 Chart.register(...registerables);
 @Component({
   selector: 'app-last12-month-graph',
-  imports: [],
+  imports: [CurrencyPipe, CommonModule],
   templateUrl: './last12-month-graph.component.html',
   styleUrl: './last12-month-graph.component.css'
 })
@@ -23,7 +25,9 @@ export class Last12MonthGraphComponent implements OnInit, AfterViewInit, OnDestr
   gradientChartOptionsConfigurationWithTooltipRed: any;
   public context: CanvasRenderingContext2D;
   myChart: any;
-  constructor(private store: Store<AppState>) {
+  showAverage: boolean;
+  LDready : boolean = false;
+  constructor(private store: Store<AppState>, private ldService: FeatureFlagService) {
     this.gradientChartOptionsConfigurationWithTooltipRed = {
       responsive: true,
       maintainAspectRatio: false,
@@ -39,6 +43,19 @@ export class Last12MonthGraphComponent implements OnInit, AfterViewInit, OnDestr
     }
   }
   ngOnInit(): void {
+
+    this.ldService.getLDReady().subscribe((ready)=>{
+      this.LDready = ready;
+      if(this.LDready){
+        this.showAverage = this.ldService.getFlag('show-average', false);
+      }
+    })
+    this.ldService.getFlagChanges().subscribe(() => {
+      if(this.LDready){
+        this.showAverage = this.ldService.getFlag('show-average', false);
+      }
+    });
+ 
     this.lineGraphData$ = this.store.pipe(
       select(last12MonthsBalancesSelector)
     );

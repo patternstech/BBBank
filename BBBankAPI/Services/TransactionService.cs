@@ -26,6 +26,7 @@ namespace Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRulesEngineService _rulesEngineService;
         private readonly INotificationService _notificationService;
+        private readonly FeatureService _featureService;
         public Settings _settings { get; }
 
         public TransactionService(IHubContext<UpdateHub> hubContext,
@@ -33,7 +34,8 @@ namespace Services
             IOptionsSnapshot<Settings> options,
             IHttpContextAccessor httpContextAccessor,
             IRulesEngineService rulesEngineService,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            FeatureService featureService)
         {
             _hubContext = hubContext;
             _unitOfWork = unitOfWork;
@@ -41,6 +43,7 @@ namespace Services
             _httpContextAccessor = httpContextAccessor;
             _rulesEngineService = rulesEngineService;
             _notificationService = notificationService;
+            _featureService = featureService;
         }
         public async Task<LineGraphData> GetLast12MonthBalances(string userId)
         {
@@ -71,7 +74,8 @@ namespace Services
                     lastMonthTotal = runningTotal;
 
                 }
-                if (apiVersion == "v2")
+                var isShowAverageEnabled = _featureService.IsFeatureEnabled("show-average", _httpContextAccessor.HttpContext.GetUserId());
+                if (apiVersion == "v2" || isShowAverageEnabled)
                 {
                     lineGraphData.Average = lineGraphData.Figures.Average();
                 }
