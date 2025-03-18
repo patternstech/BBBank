@@ -131,9 +131,7 @@ namespace Infrastructure
             var existing = await DbSet.FindAsync(updated.Id);
             if (existing != null)
             {
-                _context.Entry(existing).State = EntityState.Detached;
-                _context.Attach(updated);
-                _context.Entry(updated).State = EntityState.Modified;
+                _context.Entry(existing).CurrentValues.SetValues(updated);
 
                 // Ensure navigation properties are also updated
                 foreach (var navigationProperty in _context.Entry(updated).Navigations)

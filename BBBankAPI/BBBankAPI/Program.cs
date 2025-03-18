@@ -23,6 +23,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Asp.Versioning;
 using Microsoft.Extensions.DependencyInjection;
 using BBBankAPI.ConfigExtentions;
+using Microsoft.ApplicationInsights.DependencyCollector;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -30,6 +31,10 @@ var configuration = builder.Configuration;
 builder.Services.ConfigureSwagger();
 builder.ConfigureLogging();
 builder.Services.AddApplicationInsightsTelemetry();
+builder.Services.ConfigureTelemetryModule<DependencyTrackingTelemetryModule>((module, options) =>
+{
+    module.EnableSqlCommandTextInstrumentation = true;
+});
 builder.Services.AddCorsPolicy();
 builder.ConfigureAppConfiguration();
 builder.Services.ConfigureAzureServices(builder.Configuration);
@@ -45,10 +50,10 @@ builder.Services.AddMicrosoftIdentityWebApiAuthentication(configuration, "AzureA
 builder.Services.ConfigureAutoMapper();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-//builder.Services.Configure<ApiBehaviorOptions>(options =>
-//{
-//    options.SuppressModelStateInvalidFilter = true;
-//});
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 var app = builder.Build();
 app.ConfigureSwaggerUI();
 
