@@ -1,0 +1,34 @@
+# Visual Studio Code settings and user-specific files
+.vscode
+*.vscode
+settings.json
+extensions.json
+workspace.json
+launch.json
+debug.log
+.DS_Store
+
+# Build outputs
+bin/
+obj/
+
+# NuGet packages
+packages/
+*.nupkg
+
+# Test results
+TestResults/
+
+# Dependency injection
+*.dll.config
+
+# Temporary files
+*.tmp
+*.log
+
+# Editor-specific files
+*.suo
+*.user
+
+# Visual Studio 2015/2017 cache/options directory
+.vs/
